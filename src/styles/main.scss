@@ -1,0 +1,13 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,700');
+
+// Mixins & variables
+@import 'mixins';
+@import 'variables';
+
+// Bootstrap & Bootstrap-vue
+@import 'bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+// Pages
+@import 'home';

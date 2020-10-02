@@ -40,11 +40,17 @@
           <h2>
             ¿Qué especie?
             <a href="#" id="borrar_especie_id">
-              <Icon  :icon="['far', 'trash-alt']" />
+              <Icon :icon="['far', 'trash-alt']" />
             </a>
           </h2>
+          <vSelect :options="species"></vSelect>
           <select class="custom-select" name="especie_id">
-            <!-- Options loaded via ajax -->
+            <option value="">
+              Todas
+            </option>
+            <option v-for="s in species" :value="s.id" :key="s.id">
+              {{ s.nombre_cientifico }} {{ s.nombre_comun }}
+            </option>
           </select>
         </div>
       </div>
@@ -96,7 +102,7 @@
             </label>
           </div>
           <a href="#" id="borrar_origen">
-            <Icon  :icon="['far', 'trash-alt']" />
+            <Icon :icon="['far', 'trash-alt']" />
           </a>
         </div>
 
@@ -179,7 +185,20 @@
 </template>
 
 <script>
+import vSelect from "vue-select";
+
 export default {
-  name: "Form"
+  name: "Form",
+  components: {
+    vSelect
+  },
+  computed: {
+    species() {
+      return this.$store.getters.getSpeciesAsOptions;
+    }
+  },
+  created: function() {
+    this.$store.dispatch("fetchSpecies");
+  }
 };
 </script>

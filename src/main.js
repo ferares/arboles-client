@@ -6,19 +6,32 @@ import store from "./store";
 
 // Bootstrap Vue
 import { BootstrapVue } from "bootstrap-vue";
-Vue.use(BootstrapVue);
 
 // Fontawesome icons
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
-import { faFacebook } from "@fortawesome/free-brands-svg-icons";
-// import { faFontAwesome } from "@fortawesome/free-brands-svg-icons";
+import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFacebook,
+  faGithub,
+  faInstagram,
+  faTwitter
+} from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-library.add(faTrashAlt, faFacebook);
+library.add(
+  faTrashAlt,
+  faFacebook,
+  faCaretRight,
+  faGithub,
+  faInstagram,
+  faTwitter
+);
 Vue.component("Icon", FontAwesomeIcon);
 
 // Styles
 import "./styles/main.scss";
+
+Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;
 

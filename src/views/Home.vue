@@ -4,7 +4,9 @@
       <a class="d-flex flex-row-reverse align-items-center mb-4" href="/">
         <h1 class="main-title">
           Arbolado Urbano
-          <small class="text-secondary">Internacional</small>
+          <small class="text-secondary">
+            Internacional
+          </small>
         </h1>
         <img class="img-fluid" src="../assets/logo-blanco.png" alt="" />
       </a>
@@ -23,14 +25,16 @@
           </a>
         </div>
         <div class="col-12 col-sm-3 col-md-6">
-          <!-- TODO: Modals -->
-          <button class="btn btn-light btn-small btn-block">
+          <button
+            class="btn btn-light btn-small btn-block"
+            @click="$bvModal.show('modal-about')"
+          >
             Sobre el mapa
           </button>
         </div>
       </div>
 
-      <!-- TODO: Adsense -->
+      <Adsense :ad-client="adsenseClient" :ad-slot="adsenseSlot"></Adsense>
 
       <div class="row text-center mt-4">
         <p class="col-12 col-sm-3 col-md-12 text-muted">
@@ -75,17 +79,32 @@
     <main class="col-md-8 col-lg-9">
       <!-- TODO: iframe -->
     </main>
+    <About />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+
+// Components
 import Form from "@/components/Form.vue";
+import Adsense from "@/components/Adsense.vue";
+
+// Modals
+import About from "@/modals/About.vue";
 
 export default {
   name: "Home",
   components: {
-    Form
+    Form,
+    Adsense,
+    About
+  },
+  data: function() {
+    return {
+      adsenseSlot: process.env.VUE_APP_ADSENSE_SLOT,
+      adsenseClient: process.env.VUE_APP_ADSENSE_CLIENT
+    };
   }
 };
 </script>

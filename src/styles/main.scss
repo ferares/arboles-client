@@ -13,5 +13,16 @@
 @import '../../node_modules/vue-multiselect/dist/vue-multiselect.min.css';
 @import 'multiselect';
 
+// Leaflet
+@import '../../node_modules/leaflet/dist/leaflet.css';
+
 // Pages
 @import 'home';
+
+body {
+  height: 100vh;
+}
+
+#app {
+  height: 100%;
+}

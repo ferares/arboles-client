@@ -1,6 +1,6 @@
 <template>
   <form method="post">
-    <input type="hidden" name="user_latlng" id="user_latlng" />
+    <input type="hidden" name="user_latlng" />
     <input type="hidden" name="radio" value="1000" />
     <div class="row">
       <div class="col-12">
@@ -39,19 +39,37 @@
         <div class="form-group">
           <h2>
             ¿Qué especie?
-            <a href="#" id="borrar_especie_id">
+            <a href="#">
               <Icon :icon="['far', 'trash-alt']" />
             </a>
           </h2>
-          <vSelect :options="species"></vSelect>
-          <select class="custom-select" name="especie_id">
-            <option value="">
-              Todas
-            </option>
-            <option v-for="s in species" :value="s.id" :key="s.id">
-              {{ s.nombre_cientifico }} {{ s.nombre_comun }}
-            </option>
-          </select>
+          <multiselect
+            track-by="id"
+            :options="speciesOptions"
+            v-model="species"
+            placeholder="Todas"
+            :custom-label="speciesLabel"
+            selectLabel=""
+            deselectLabel=""
+            selectedLabel=""
+          >
+            <slot slot="singleLabel" slot-scope="props">
+              {{ props.option.nombre_cientifico }}
+              <small class="muted-text">
+                {{ props.option.nombre_comun }}
+              </small>
+            </slot>
+            <slot slot="option" slot-scope="props">
+              {{ props.option.nombre_cientifico }}
+              <small class="muted-text">
+                {{ props.option.nombre_comun }}
+              </small>
+            </slot>
+            <slot slot="noResult" slot-scope="props">
+              No hay resultados para
+              <i>"{{ props.search }}"</i>
+            </slot>
+          </multiselect>
         </div>
       </div>
 
@@ -185,16 +203,27 @@
 </template>
 
 <script>
-import vSelect from "vue-select";
+import Multiselect from "vue-multiselect";
 
 export default {
   name: "Form",
   components: {
-    vSelect
+    Multiselect
+  },
+  data: function() {
+    return {
+      species: ""
+    };
   },
   computed: {
-    species() {
-      return this.$store.getters.getSpeciesAsOptions;
+    speciesOptions() {
+      return this.$store.getters.getSpecies;
+    }
+  },
+  methods: {
+    // For letting vue-multiselect search use the species common and scientific name
+    speciesLabel: function({ nombre_comun, nombre_cientifico }) {
+      return `${nombre_comun} ${nombre_cientifico}`;
     }
   },
   created: function() {

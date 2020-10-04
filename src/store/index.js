@@ -27,13 +27,8 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    getSpeciesAsOptions(state) {
-      return state.species.map(s => {
-        return {
-          label: `${s.nombre_cientifico} <small class="muted-text">${s.nombre_comun}</small>`,
-          code: s.id
-        };
-      });
+    getSpecies(state) {
+      return state.species;
     }
   },
   modules: {}

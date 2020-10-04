@@ -1,0 +1,10 @@
+// Override styles for vue-multiselect
+.multiselect__content-wrapper {
+  border-top: 1px solid #e8e8e8 !important;
+  // Prevent the vertical scrollbar from triggering the horizontal scrollbar on FF
+  padding-right: 12px;
+  // Move the dropdown 1px up so the border-top overlaps the select's border
+  top: 39px;
+  // Allow for the dropdown to be wider than it's parent
+  width: auto !important;
+}

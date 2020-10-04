@@ -9,8 +9,9 @@
 @import 'bootstrap';
 @import 'node_modules/bootstrap-vue/src/index.scss';
 
-// Vue-select
-@import '../../node_modules/vue-select/src/scss/vue-select.scss';
+// Vue-multiselect
+@import '../../node_modules/vue-multiselect/dist/vue-multiselect.min.css';
+@import 'multiselect';
 
 // Pages
 @import 'home';

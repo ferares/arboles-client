@@ -204,7 +204,9 @@
       </b-collapse>
       <div class="col-12">
         <button v-b-toggle.filters type="button" class="btn btn-secondary">
-          Ocultar filtros
+          <span class="when-open">Ocultar</span>
+          <span class="when-closed">Mostrar</span>
+          filtros
         </button>
       </div>
     </div>

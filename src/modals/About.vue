@@ -90,3 +90,9 @@
     </b-button>
   </b-modal>
 </template>
+
+<script>
+export default {
+  name: "About"
+};
+</script>

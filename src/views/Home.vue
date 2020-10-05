@@ -2,9 +2,13 @@
   <div class="container-fluid h-100">
     <div class="row h-100">
       <aside class="col-12 col-md-4 col-lg-3 py-4">
-        <a class="d-flex flex-row-reverse align-items-center mb-4" href="/">
+        <a
+          class="d-flex flex-row-reverse align-items-center mb-4 justify-content-end"
+          href="/"
+        >
           <h1 class="main-title">
             Arbolado Urbano
+            <br />
             <small class="text-secondary">
               Internacional
             </small>

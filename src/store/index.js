@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     loading: false,
     species: [],
+    tree: undefined,
     map: {
       marker: undefined,
       circle: undefined,
@@ -89,6 +90,9 @@ export default new Vuex.Store({
     },
     SET_MAP_TREES(state, trees) {
       state.map.trees = trees;
+    },
+    SET_TREE(state, tree) {
+      state.tree = tree;
     }
   },
   getters: {
@@ -112,6 +116,9 @@ export default new Vuex.Store({
     },
     getTrees(state) {
       return state.map.trees;
+    },
+    getTree(state) {
+      return state.tree;
     }
   },
   actions: {
@@ -124,10 +131,26 @@ export default new Vuex.Store({
     },
     fetchTrees(context) {
       context.commit("SET_LOADING_STATUS", true);
-      axios.get(`${process.env.VUE_APP_API_URL}arboles`).then(response => {
-        context.commit("SET_LOADING_STATUS", false);
-        context.commit("SET_MAP_TREES", response.data);
-      });
+      axios
+        .get(`${process.env.VUE_APP_API_URL}arboles`, {
+          params: {
+            radio: process.env.VUE_APP_SEARCH_RADIUS,
+            user_latlng: context.getters.getFormMarker
+          }
+        })
+        .then(response => {
+          context.commit("SET_LOADING_STATUS", false);
+          context.commit("SET_MAP_TREES", response.data);
+        });
+    },
+    fetchTree(context, id) {
+      context.commit("SET_LOADING_STATUS", true);
+      axios
+        .get(`${process.env.VUE_APP_API_URL}arboles/${id}`)
+        .then(response => {
+          context.commit("SET_LOADING_STATUS", false);
+          context.commit("SET_TREE", response.data);
+        });
     }
   },
   modules: {}

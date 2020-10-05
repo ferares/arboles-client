@@ -10,9 +10,16 @@ import { BootstrapVue } from "bootstrap-vue";
 // Fontawesome icons
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
-import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCaretRight,
+  faLink,
+  faExternalLinkAlt,
+  faMapMarkerAlt
+} from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebook,
+  faFacebookF,
+  faFacebookSquare,
   faGithub,
   faInstagram,
   faTwitter
@@ -21,10 +28,15 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(
   faTrashAlt,
   faFacebook,
+  faFacebookF,
+  faFacebookSquare,
   faCaretRight,
   faGithub,
   faInstagram,
-  faTwitter
+  faTwitter,
+  faLink,
+  faExternalLinkAlt,
+  faMapMarkerAlt
 );
 Vue.component("Icon", FontAwesomeIcon);
 

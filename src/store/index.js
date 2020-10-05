@@ -10,6 +10,7 @@ export default new Vuex.Store({
     loading: false,
     species: [],
     tree: undefined,
+    showTreePanel: false,
     map: {
       marker: undefined,
       circle: undefined,
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     },
     SET_FORM_REGIONS(state, regions) {
       state.form.regions = regions;
+    },
+    SET_SHOW_TREE_PANEL(state, show) {
+      state.showTreePanel = show;
     },
     UNSET_MAP_MARKER(state) {
       state.map.marker.remove();
@@ -119,6 +123,9 @@ export default new Vuex.Store({
     },
     getTree(state) {
       return state.tree;
+    },
+    getShowTreePanel(state) {
+      return state.showTreePanel;
     }
   },
   actions: {
@@ -150,7 +157,11 @@ export default new Vuex.Store({
         .then(response => {
           context.commit("SET_LOADING_STATUS", false);
           context.commit("SET_TREE", response.data);
+          context.commit("SET_SHOW_TREE_PANEL", true);
         });
+    },
+    closeTreePanel(context) {
+      context.commit("SET_SHOW_TREE_PANEL", false);
     }
   },
   modules: {}

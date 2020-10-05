@@ -1,6 +1,7 @@
 <template>
   <div class="container-fluid h-100">
     <div class="row h-100">
+      <Tree />
       <aside class="col-12 col-md-4 col-lg-3 py-4">
         <a
           class="d-flex flex-row-reverse align-items-center mb-4 justify-content-end"
@@ -96,6 +97,7 @@
 import Form from "@/components/Form.vue";
 import Adsense from "@/components/Adsense.vue";
 import Map from "@/components/Map.vue";
+import Tree from "@/components/Tree.vue";
 
 // Modals
 import About from "@/modals/About.vue";
@@ -106,7 +108,8 @@ export default {
     Form,
     Adsense,
     Map,
-    About
+    About,
+    Tree
   },
   data: function() {
     return {

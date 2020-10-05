@@ -1,5 +1,5 @@
 <template>
-  <form method="post">
+  <form @submit="submit($event)">
     <input type="hidden" name="user_latlng" />
     <input type="hidden" name="radio" value="1000" />
     <div class="row">
@@ -11,24 +11,26 @@
           <div class="custom-control custom-radio custom-control-inline">
             <input
               type="radio"
-              id="rdonde-ciudad"
-              name="rdonde"
+              id="marker-all"
+              name="marker"
               class="custom-control-input"
               value="0"
+              v-model="marker"
             />
-            <label class="custom-control-label" for="rdonde-ciudad">
+            <label class="custom-control-label" for="marker-all">
               En todo el mapa
             </label>
           </div>
           <div class="custom-control custom-radio custom-control-inline">
             <input
               type="radio"
-              id="rdonde-mapa"
-              name="rdonde"
+              id="marker-point"
+              name="marker"
               class="custom-control-input"
               value="1"
+              v-model="marker"
             />
-            <label class="custom-control-label" for="rdonde-mapa">
+            <label class="custom-control-label" for="marker-point">
               Marcar en el mapa
             </label>
           </div>
@@ -82,10 +84,11 @@
             <input
               type="checkbox"
               class="custom-control-input"
-              id="user_sabores"
-              name="user_sabores"
+              id="input-flavors"
+              name="flavors"
+              v-model="flavors"
             />
-            <label class="custom-control-label" for="user_sabores">
+            <label class="custom-control-label" for="input-flavors">
               Frutales y medicinales
             </label>
           </div>
@@ -102,6 +105,7 @@
               name="user_origen"
               class="custom-control-input"
               value="Nativo/Autóctono"
+              v-model="origin"
             />
             <label class="custom-control-label" for="rorigen-nativas">
               Nativas
@@ -114,6 +118,7 @@
               name="user_origen"
               class="custom-control-input"
               value="Exótico"
+              v-model="origin"
             />
             <label class="custom-control-label" for="rorigen-exoticas">
               Exóticas
@@ -135,6 +140,8 @@
                 class="custom-control-input"
                 id="borigen_pampeana"
                 name="borigen_pampeana"
+                value="borigen_pampeana"
+                v-model="regions"
               />
               <label class="custom-control-label" for="borigen_pampeana">
                 Pampeana
@@ -146,6 +153,8 @@
                 class="custom-control-input"
                 id="borigen_nea"
                 name="borigen_nea"
+                value="borigen_nea"
+                v-model="regions"
               />
               <label class="custom-control-label" for="borigen_nea">
                 NEA
@@ -157,6 +166,8 @@
                 class="custom-control-input"
                 id="borigen_noa"
                 name="borigen_noa"
+                value="borigen_noa"
+                v-model="regions"
               />
               <label class="custom-control-label" for="borigen_noa">
                 NOA
@@ -168,6 +179,8 @@
                 class="custom-control-input"
                 id="borigen_cuyana"
                 name="borigen_cuyana"
+                value="borigen_cuyana"
+                v-model="regions"
               />
               <label class="custom-control-label" for="borigen_cuyana">
                 Cuyana
@@ -179,6 +192,8 @@
                 class="custom-control-input"
                 id="borigen_patagonica"
                 name="borigen_patagonica"
+                value="borigen_patagonica"
+                v-model="regions"
               />
               <label class="custom-control-label" for="borigen_patagonica">
                 Patagónica
@@ -210,20 +225,70 @@ export default {
   components: {
     Multiselect
   },
-  data: function() {
-    return {
-      species: ""
-    };
-  },
   computed: {
     speciesOptions() {
       return this.$store.getters.getSpecies;
+    },
+    flavors: {
+      get() {
+        return this.$store.getters.getFormFlavors;
+      },
+      set(value) {
+        this.$store.commit("SET_FORM_FLAVORS", value);
+      }
+    },
+    species: {
+      get() {
+        const id = this.$store.getters.getFormSpecies;
+        if (id) {
+          return this.speciesOptions.find(s => s.id === id);
+        }
+
+        return "";
+      },
+      set(value) {
+        this.$store.commit("SET_FORM_SPECIES", value);
+      }
+    },
+    origin: {
+      get() {
+        return this.$store.getters.getFormOrigin;
+      },
+      set(value) {
+        this.$store.commit("SET_FORM_ORIGIN", value);
+      }
+    },
+    regions: {
+      get() {
+        return this.$store.getters.getFormRegions;
+      },
+      set(value) {
+        this.$store.commit("SET_FORM_REGIONS", value);
+      }
+    },
+    marker: {
+      get() {
+        if (this.$store.getters.getFormMarker) {
+          return "1";
+        }
+
+        return "0";
+      },
+      set(value) {
+        if (value === "0") {
+          this.$store.commit("UNSET_MAP_MARKER");
+        }
+      }
     }
   },
   methods: {
     // For letting vue-multiselect search use the species common and scientific name
     speciesLabel: function({ nombre_comun, nombre_cientifico }) {
       return `${nombre_comun} ${nombre_cientifico}`;
+    },
+    submit: function(event) {
+      event.preventDefault();
+      this.$store.dispatch("fetchTrees");
     }
   },
   created: function() {

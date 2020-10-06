@@ -3,5 +3,6 @@
   leaflet
   [leafletOptions]="options"
   [leafletMarkerCluster]="trees"
-  [leafletMarkerClusterOptions]="options.clusterOptions">
+  [leafletMarkerClusterOptions]="options.clusterOptions"
+  (leafletClick)="setMarker($event)">
 </div>

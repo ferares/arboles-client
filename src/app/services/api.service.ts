@@ -42,4 +42,17 @@ export class ApiService {
     );
   }
 
+  /**
+   * Gets the list of species from the API
+   * @return Observable.
+   */
+  public search(data): Observable<any> {
+    this.setLoading(true); // Update loading status
+
+    return this.http.get<any>(`${API_URL}/arboles`, data).pipe(
+      catchError((err) => throwError(err)),
+      finalize(() => this.setLoading(false)),
+    );
+  }
+
 }

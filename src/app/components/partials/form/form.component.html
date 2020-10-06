@@ -1,4 +1,4 @@
-<form>
+<form [formGroup]="form" [ngClass]="{ 'was-validated': validated }" novalidate>
   <input type="hidden" name="user_latlng">
   <input type="hidden" name="radio" value="1000">
   <div class="row">
@@ -8,13 +8,13 @@
           ¿Dónde?
         </h2>
         <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="marker-all" name="marker" class="custom-control-input" value="0">
+          <input type="radio" id="marker-all" formControlName="marker" class="custom-control-input" value="0">
           <label class="custom-control-label" for="marker-all">
             En todo el mapa
           </label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="marker-point" name="marker" class="custom-control-input" value="1">
+          <input type="radio" id="marker-point" formControlName="marker" class="custom-control-input" [value]="latlng">
           <label class="custom-control-label" for="marker-point">
             Marcar en el mapa
           </label>
@@ -30,7 +30,7 @@
             <!-- <Icon :icon="['far', 'trash-alt']"> -->
           </a>
         </h2>
-        <app-species-select [elements]="species"></app-species-select>
+        <app-species-select [elements]="species" formControlName="species"></app-species-select>
       </div>
     </div>
 
@@ -40,7 +40,7 @@
           Sabores
         </h2>
         <div class="custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" id="input-flavors" name="flavors">
+          <input type="checkbox" class="custom-control-input" id="input-flavors" formControlName="flavors">
           <label class="custom-control-label" for="input-flavors">
             Frutales y medicinales
           </label>
@@ -52,13 +52,13 @@
           Origen
         </h2>
         <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="rorigen-nativas" name="user_origen" class="custom-control-input" value="Nativo/Autóctono">
+          <input type="radio" id="rorigen-nativas" formControlName="origin" class="custom-control-input" value="Nativo/Autóctono">
           <label class="custom-control-label" for="rorigen-nativas">
             Nativas
           </label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="rorigen-exoticas" name="user_origen" class="custom-control-input" value="Exótico">
+          <input type="radio" id="rorigen-exoticas" formControlName="origin" class="custom-control-input" value="Exótico">
           <label class="custom-control-label" for="rorigen-exoticas">
             Exóticas
           </label>
@@ -74,31 +74,31 @@
             Región de origen
           </h2>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_pampeana" name="borigen_pampeana" value="borigen_pampeana">
+            <input type="checkbox" class="custom-control-input" id="borigen_pampeana" formControlName="region" value="pampeana">
             <label class="custom-control-label" for="borigen_pampeana">
               Pampeana
             </label>
           </div>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_nea" name="borigen_nea" value="borigen_nea">
+            <input type="checkbox" class="custom-control-input" id="borigen_nea" formControlName="region" value="nea">
             <label class="custom-control-label" for="borigen_nea">
               NEA
             </label>
           </div>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_noa" name="borigen_noa" value="borigen_noa">
+            <input type="checkbox" class="custom-control-input" id="borigen_noa" formControlName="region" value="noa">
             <label class="custom-control-label" for="borigen_noa">
               NOA
             </label>
           </div>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_cuyana" name="borigen_cuyana" value="borigen_cuyana">
+            <input type="checkbox" class="custom-control-input" id="borigen_cuyana" formControlName="region" value="cuyana">
             <label class="custom-control-label" for="borigen_cuyana">
               Cuyana
             </label>
           </div>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_patagonica" name="borigen_patagonica" value="borigen_patagonica">
+            <input type="checkbox" class="custom-control-input" id="borigen_patagonica" formControlName="region" value="patagonica">
             <label class="custom-control-label" for="borigen_patagonica">
               Patagónica
             </label>
@@ -114,5 +114,7 @@
       </button>
     </div>
   </div>
-  <input name="Buscar" type="submit" value="Buscar" class="btn btn-primary btn-lg btn-block mt-4">
+  <button type="button" class="btn btn-primary btn-lg btn-block mt-4" (click)="search()">
+    Buscar
+  </button>
 </form>

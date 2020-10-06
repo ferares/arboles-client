@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import * as L from 'leaflet';
 
@@ -9,7 +9,9 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./map.component.scss'],
   templateUrl: './map.component.html',
 })
-export class MapComponent {
+export class MapComponent implements OnChanges {
+  @Input() public trees = [];
+  @Output() public latlng: EventEmitter<L.LatLng> = new EventEmitter();
   public options = {
     center: [-34.618, -58.44],
     clusterOptions: {
@@ -35,9 +37,43 @@ export class MapComponent {
   };
   public marker: L.Marker;
   public circle: L.Circle;
-  public trees: L.Marker[] = [];
+  public treeMarkers: L.Marker[] = [];
+  private iconAnchor = [15, 31];
+  private iconSize = [30, 34];
+  private defaultIcon: L.Icon;
 
-  constructor() { }
+  constructor() {
+    this.defaultIcon = new L.Icon({
+      iconAnchor: this.iconAnchor,
+      iconSize: this.iconSize,
+      iconUrl: `assets/imgs/markers/marker.png`,
+    });
+  }
+
+  // When the tree list is updated => update the map
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.trees) {
+      this.treeMarkers = [];
+      for (const tree of changes.trees.currentValue) {
+        let icon = this.defaultIcon;
+        if (tree.icono) {
+          icon = new L.Icon({
+            iconAnchor: this.iconAnchor,
+            iconSize: this.iconSize,
+            iconUrl: `assets/imgs/markers/${tree.icono}`,
+          });
+        }
+        this.treeMarkers.push(new L.Marker([tree.lat, tree.lng], { icon }));
+      }
+    }
+  }
+
+  private latlngUpdated(map, latlng: L.LatLng): void {
+    // Emit the new marker coordinates
+    this.latlng.emit(latlng);
+    // Re-center the map around the marker
+    map.panTo(latlng);
+  }
 
   public setMarker(event): void {
     const map = event.target;
@@ -65,7 +101,7 @@ export class MapComponent {
       this.marker.on('dragend', (dragEvent) => {
         const latlng = dragEvent.target.getLatLng();
         this.circle.setLatLng(latlng);
-        map.panTo(new L.LatLng(latlng.lat, latlng.lng));
+        this.latlngUpdated(map, latlng);
       });
     } else {
       // If a marker already exists, move it and its circle
@@ -73,7 +109,7 @@ export class MapComponent {
       this.circle.setLatLng([event.latlng.lat, event.latlng.lng]);
     }
 
-    // Re-center the map around the marker
-    map.panTo(new L.LatLng(event.latlng.lat, event.latlng.lng));
+    this.latlngUpdated(map, event.latlng);
   }
+
 }

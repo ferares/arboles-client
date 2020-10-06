@@ -5,6 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+// Components
 import { SpeciesSelectComponent } from './components/form-controls/species-select/species-select.component';
 import { AboutComponent } from './components/partials/about/about.component';
 import { AdsenseComponent } from './components/partials/adsense/adsense.component';
@@ -13,12 +15,19 @@ import { MapComponent } from './components/partials/map/map.component';
 import { TreeComponent } from './components/partials/tree/tree.component';
 import { HomeComponent } from './components/views/home/home.component';
 
+// Resolvers
 import { SpeciesResolver } from './resolvers/species.resolver';
 
+// Services
 import { ApiService } from './services/api.service';
 
+// ngx-bootstrap
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
+// ngx-leaflet
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -39,6 +48,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     HttpClientModule,
+    LeafletModule,
+    LeafletMarkerClusterModule,
   ],
   providers: [
     ApiService,

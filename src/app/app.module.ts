@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 // Components
 import { SpeciesSelectComponent } from './components/form-controls/species-select/species-select.component';
 import { AboutComponent } from './components/partials/about/about.component';
-import { AdsenseComponent } from './components/partials/adsense/adsense.component';
 import { FormComponent } from './components/partials/form/form.component';
 import { MapComponent } from './components/partials/map/map.component';
 import { TreeComponent } from './components/partials/tree/tree.component';
@@ -29,6 +28,9 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
 
+// ng2-adsense
+import { AdsenseModule } from 'ng2-adsense';
+
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [
@@ -37,7 +39,6 @@ import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluste
     MapComponent,
     FormComponent,
     TreeComponent,
-    AdsenseComponent,
     AboutComponent,
     SpeciesSelectComponent,
   ],
@@ -47,6 +48,7 @@ import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluste
     BrowserAnimationsModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
+    AdsenseModule.forRoot(),
     HttpClientModule,
     LeafletModule,
     LeafletMarkerClusterModule,

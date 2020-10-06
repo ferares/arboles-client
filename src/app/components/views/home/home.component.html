@@ -28,7 +28,11 @@
         </div>
       </div>
 
-      <!-- <Adsense :ad-client="adsenseClient" :ad-slot="adsenseSlot"></Adsense> -->
+      <ng-adsense
+        [adClient]="adClient"
+        [adSlot]="adSlot"
+        [display]="'block'">
+      </ng-adsense>
 
       <div class="row text-center mt-4">
         <p class="col-12 col-sm-3 col-md-12 text-muted">

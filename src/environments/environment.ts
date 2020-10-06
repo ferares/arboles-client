@@ -3,6 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  adsenseClient: 'ca-pub-7228206495347837',
+  adsenseSlot: '8591261973',
   apiUrl: 'https://arbolado.ares.uy/public/',
   highlightColor: '#5cba9d',
   mapDisableClusteringAt: 21,

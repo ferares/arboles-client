@@ -1,0 +1,13 @@
+<div class="btn-group" dropdown>
+  <button id="species-dropdown-btn" type="button" class="custom-select text-left" dropdownToggle aria-controls="species-dropdown">
+    {{ label }} &nbsp;
+  </button>
+  <ul id="species-dropdown" class="dropdown-menu" *dropdownMenu role="menu">
+    <li *ngFor="let element of elements" class="dropdown-item" [ngClass]="{ 'active': element.id === value }" (click)="select(element.id, element.nombre_cientifico)">
+      {{ element.nombre_cientifico }}
+      <small class="muted-text">
+        {{ element.nombre_comun }}
+      </small>
+    </li>
+  </ul>
+</div>

@@ -1,18 +1,24 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-import { HomeComponent } from './views/home/home.component';
+import { HomeComponent } from './components/views/home/home.component';
+
+import { SpeciesResolver } from './resolvers/species.resolver';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  {
+    component: HomeComponent,
+    path: '',
+    resolve: { species: SpeciesResolver },
+  },
 ];
 
 @NgModule({
+  exports: [RouterModule],
   imports: [RouterModule.forRoot(routes, {
     // enableTracing :true, // For debugging
-    useHash: false,
     scrollPositionRestoration: 'enabled',
+    useHash: false,
   })],
-  exports: [RouterModule]
 })
 export class AppRoutingModule { }

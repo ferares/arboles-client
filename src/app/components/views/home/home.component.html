@@ -1,5 +1,7 @@
 <div class="container-fluid h-100">
   <div class="row h-100">
+    <app-tree [treeId]="treeId">
+    </app-tree>
     <aside class="col-12 col-md-4 col-lg-3 py-4">
       <a class="d-flex flex-row-reverse align-items-center mb-4 justify-content-end" href="/">
         <h1 class="main-title">
@@ -12,7 +14,8 @@
         <img class="img-fluid" src="assets/imgs/logo-blanco.png" alt="">
       </a>
 
-      <app-form [species]="species" [latlng]="latlng" (trees)="updateTrees($event)"></app-form>
+      <app-form [species]="species" [latlng]="latlng" (treesLoaded)="updateTrees($event)">
+      </app-form>
 
       <div class="row mt-4">
         <div class="col-12 col-sm-3 col-md-6">
@@ -28,10 +31,7 @@
         </div>
       </div>
 
-      <ng-adsense
-        [adClient]="adClient"
-        [adSlot]="adSlot"
-        [display]="'block'">
+      <ng-adsense [adClient]="adClient" [adSlot]="adSlot" [display]="'block'">
       </ng-adsense>
 
       <div class="row text-center mt-4">
@@ -51,7 +51,8 @@
       </div>
     </aside>
     <main class="col-md-8 col-lg-9 p-0">
-      <app-map [trees]="trees" (latlng)="updateLatlng($event)"></app-map>
+      <app-map [trees]="trees" (markerSet)="updateLatlng($event)" (treeSelected)="updateTree($event)">
+      </app-map>
     </main>
   </div>
   <!-- <About> -->

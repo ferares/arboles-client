@@ -11,7 +11,8 @@ import { environment } from '../../../../environments/environment';
 })
 export class MapComponent implements OnChanges {
   @Input() public trees = [];
-  @Output() public latlng: EventEmitter<L.LatLng> = new EventEmitter();
+  @Output() public markerSet: EventEmitter<L.LatLng> = new EventEmitter();
+  @Output() public treeSelected: EventEmitter<L.LatLng> = new EventEmitter();
   public options = {
     center: [-34.618, -58.44],
     clusterOptions: {
@@ -38,14 +39,12 @@ export class MapComponent implements OnChanges {
   public marker: L.Marker;
   public circle: L.Circle;
   public treeMarkers: L.Marker[] = [];
-  private iconAnchor = [15, 31];
-  private iconSize = [30, 34];
   private defaultIcon: L.Icon;
 
   constructor() {
     this.defaultIcon = new L.Icon({
-      iconAnchor: this.iconAnchor,
-      iconSize: this.iconSize,
+      iconAnchor: [15, 31],
+      iconSize: [30, 34],
       iconUrl: `assets/imgs/markers/marker.png`,
     });
   }
@@ -54,23 +53,27 @@ export class MapComponent implements OnChanges {
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.trees) {
       this.treeMarkers = [];
-      for (const tree of changes.trees.currentValue) {
+      for (const tree of this.trees) {
         let icon = this.defaultIcon;
         if (tree.icono) {
           icon = new L.Icon({
-            iconAnchor: this.iconAnchor,
-            iconSize: this.iconSize,
+            iconAnchor: [15, 31],
+            iconSize: [30, 34],
             iconUrl: `assets/imgs/markers/${tree.icono}`,
           });
         }
-        this.treeMarkers.push(new L.Marker([tree.lat, tree.lng], { icon }));
+        this.treeMarkers.push(
+          new L.Marker([tree.lat, tree.lng], { icon }).on('click', () => {
+            this.selectTree(tree.id);
+          }),
+        );
       }
     }
   }
 
   private latlngUpdated(map, latlng: L.LatLng): void {
     // Emit the new marker coordinates
-    this.latlng.emit(latlng);
+    this.markerSet.emit(latlng);
     // Re-center the map around the marker
     map.panTo(latlng);
   }
@@ -110,6 +113,11 @@ export class MapComponent implements OnChanges {
     }
 
     this.latlngUpdated(map, event.latlng);
+  }
+
+  public selectTree(id): void {
+    // Emit the selected tree
+    this.treeSelected.emit(id);
   }
 
 }

@@ -43,13 +43,26 @@ export class ApiService {
   }
 
   /**
-   * Gets the list of species from the API
+   * Gets the list of trees from the API that match the selected filters
    * @return Observable.
    */
   public search(data): Observable<any> {
     this.setLoading(true); // Update loading status
 
     return this.http.get<any>(`${API_URL}/arboles`, data).pipe(
+      catchError((err) => throwError(err)),
+      finalize(() => this.setLoading(false)),
+    );
+  }
+
+  /**
+   * Gets a tree from the API
+   * @return Observable.
+   */
+  public getTree(id): Observable<any> {
+    this.setLoading(true); // Update loading status
+
+    return this.http.get<any>(`${API_URL}/arboles/${id}`).pipe(
       catchError((err) => throwError(err)),
       finalize(() => this.setLoading(false)),
     );

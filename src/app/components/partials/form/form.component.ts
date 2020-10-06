@@ -13,7 +13,7 @@ import { LatLng } from 'leaflet';
 export class FormComponent implements OnInit {
   @Input() public species: any[];
   @Input() public latlng: LatLng;
-  @Output() public trees: EventEmitter<any[]> = new EventEmitter();
+  @Output() public treesLoaded: EventEmitter<any[]> = new EventEmitter();
   public isCollapsed = true;
   public validated = false;
   public form: FormGroup;
@@ -39,7 +39,7 @@ export class FormComponent implements OnInit {
     const data = JSON.stringify(this.form.value);
 
     this.apiService.search(data).subscribe(
-      (trees) => this.trees.emit(trees),
+      (trees) => this.treesLoaded.emit(trees),
       (errors) => {
         if (errors) {
           this.validated = true;

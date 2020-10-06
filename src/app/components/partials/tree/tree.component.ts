@@ -1,15 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-tree',
+  styleUrls: ['./tree.component.scss'],
   templateUrl: './tree.component.html',
-  styleUrls: ['./tree.component.scss']
 })
-export class TreeComponent implements OnInit {
+export class TreeComponent implements OnChanges {
+  @Input() public treeId: number;
+  public tree;
+  public display = false;
 
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
-  ngOnInit(): void {
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ((changes.treeId) && (changes.treeId.currentValue)) {
+      this.apiService.getTree(this.treeId).subscribe((tree) => {
+        this.tree = tree;
+        this.display = true;
+      });
+    }
   }
 
 }

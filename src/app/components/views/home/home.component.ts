@@ -13,7 +13,8 @@ import { environment } from '../../../../environments/environment';
 export class HomeComponent {
   public species = [];
   public trees = [];
-  public latlng: LatLng = undefined;
+  public treeId;
+  public latlng: LatLng;
   public adClient = environment.adsenseClient;
   public adSlot = environment.adsenseSlot;
 
@@ -21,12 +22,16 @@ export class HomeComponent {
     this.species = route.snapshot.data.species;
   }
 
-  public updateLatlng(event: LatLng): void {
-    this.latlng = event;
+  public updateLatlng(latlng: LatLng): void {
+    this.latlng = latlng;
   }
 
-  public updateTrees(event: any[]): void {
-    this.trees = event;
+  public updateTrees(trees: any[]): void {
+    this.trees = trees;
+  }
+
+  public updateTree(treeId: any): void {
+    this.treeId = treeId;
   }
 
 }

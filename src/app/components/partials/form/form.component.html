@@ -14,7 +14,7 @@
           </label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="marker-point" formControlName="marker" class="custom-control-input" [value]="latlng">
+          <input type="radio" id="marker-point" formControlName="marker" class="custom-control-input" value="1">
           <label class="custom-control-label" for="marker-point">
             Marcar en el mapa
           </label>
@@ -69,36 +69,36 @@
       </div>
 
       <div class="form-group">
-        <div class="regiones">
+        <div class="regiones" [formGroup]="form.controls.region">
           <h2>
             Región de origen
           </h2>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_pampeana" formControlName="region" value="pampeana">
+            <input type="checkbox" class="custom-control-input" id="borigen_pampeana" formControlName="pampeana" value="1">
             <label class="custom-control-label" for="borigen_pampeana">
               Pampeana
             </label>
           </div>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_nea" formControlName="region" value="nea">
+            <input type="checkbox" class="custom-control-input" id="borigen_nea" formControlName="nea" value="1">
             <label class="custom-control-label" for="borigen_nea">
               NEA
             </label>
           </div>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_noa" formControlName="region" value="noa">
+            <input type="checkbox" class="custom-control-input" id="borigen_noa" formControlName="noa" value="1">
             <label class="custom-control-label" for="borigen_noa">
               NOA
             </label>
           </div>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_cuyana" formControlName="region" value="cuyana">
+            <input type="checkbox" class="custom-control-input" id="borigen_cuyana" formControlName="cuyana" value="1">
             <label class="custom-control-label" for="borigen_cuyana">
               Cuyana
             </label>
           </div>
           <div class="custom-control custom-switch custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="borigen_patagonica" formControlName="region" value="patagonica">
+            <input type="checkbox" class="custom-control-input" id="borigen_patagonica" formControlName="patagonica" value="1">
             <label class="custom-control-label" for="borigen_patagonica">
               Patagónica
             </label>

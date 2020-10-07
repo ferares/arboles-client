@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable, Subject, throwError } from 'rxjs';
@@ -32,11 +32,7 @@ export class ApiService {
   public getSpecies(): Observable<any> {
     this.setLoading(true); // Update loading status
 
-    const params = {
-      params: {},
-    };
-
-    return this.http.get<any>(`${API_URL}/especies`, params).pipe(
+    return this.http.get<any>(`${API_URL}/especies`).pipe(
       catchError((err) => throwError(err)),
       finalize(() => this.setLoading(false)),
     );
@@ -49,7 +45,19 @@ export class ApiService {
   public search(data): Observable<any> {
     this.setLoading(true); // Update loading status
 
-    return this.http.get<any>(`${API_URL}/arboles`, data).pipe(
+    const params = new HttpParams()
+      .set('borigen_cuyana', data.region.cuyana)
+      .set('borigen_nea', data.region.nea)
+      .set('borigen_noa', data.region.noa)
+      .set('borigen_pampeana', data.region.pampeana)
+      .set('borigen_patagonica', data.region.patagonica)
+      .set('especie_id', data.species)
+      .set('radio', environment.searchRadius.toString())
+      .set('user_latlng', data.marker)
+      .set('user_origen', data.origin)
+      .set('user_sabores', data.flavors);
+
+    return this.http.get<any>(`${API_URL}/arboles`, { params }).pipe(
       catchError((err) => throwError(err)),
       finalize(() => this.setLoading(false)),
     );

@@ -30,7 +30,7 @@ export class HomeComponent {
     this.trees = trees;
   }
 
-  public updateTree(treeId: any): void {
+  public updateTree(treeId: integer): void {
     this.treeId = treeId;
   }
 

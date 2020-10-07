@@ -5,7 +5,7 @@
 export const environment = {
   adsenseClient: 'ca-pub-7228206495347837',
   adsenseSlot: '8591261973',
-  apiUrl: 'https://arbolado.ares.uy/public',
+  apiUrl: 'http://localhost:8080',
   highlightColor: '#5cba9d',
   mapDisableClusteringAt: 21,
   mapboxToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',

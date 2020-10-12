@@ -1,4 +1,4 @@
-<div *ngIf="display" class="col-12 col-sm-9 col-md-6 p-4 info-arbol">
+<div *ngIf="display" class="col-12 col-sm-9 col-md-6 p-4 tree-info">
   <button type="button" class="close" aria-label="Close" (click)="display = false">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -28,7 +28,7 @@
     </span>
   </p>
   <p>
-    <!-- <Icon :icon="['fas', 'map-marker-alt']"> -->
+    <fa-icon [icon]="icons.faMapMarkerAlt"></fa-icon>
     <span *ngIf="tree.espacio_verde">
       Espacio verde: {{ tree.espacio_verde }}
     </span>
@@ -57,17 +57,17 @@
           {{ tree.descripcion }}
         </small>
       </p>
-      <a *ngIf="tree.url" [href]="tree.url" target="_blank" class="badge badge-pill badge-secondary mr-2">
-        <!-- <Icon :icon="['fas', 'link']"> -->
+      <a *ngIf="tree.url" [href]="tree.url" target="_blank" class="tree-info__link badge badge-pill badge-secondary mr-2">
+        <fa-icon [icon]="icons.faLink"></fa-icon>
       </a>
-      <a *ngIf="tree.facebook" [href]="tree.facebook" target="_blank" class="badge badge-pill badge-secondary mr-2">
-        <!-- <Icon :icon="['fab', 'facebook-f']"> -->
+      <a *ngIf="tree.facebook" [href]="tree.facebook" target="_blank" class="tree-info__link badge badge-pill badge-secondary mr-2">
+        <fa-icon [icon]="icons.faFacebookF"></fa-icon>
       </a>
-      <a *ngIf="tree.instagram" [href]="tree.instagram" target="_blank" class="badge badge-pill badge-secondary mr-2">
-        <!-- <Icon :icon="['fab', 'instagram']"> -->
+      <a *ngIf="tree.instagram" [href]="tree.instagram" target="_blank" class="tree-info__link badge badge-pill badge-secondary mr-2">
+        <fa-icon [icon]="icons.faInstagram"></fa-icon>
       </a>
-      <a *ngIf="tree.twitter" [href]="tree.twitter" target="_blank" class="badge badge-pill badge-secondary mr-2">
-        <!-- <Icon :icon="['fab', 'twitter']"> -->
+      <a *ngIf="tree.twitter" [href]="tree.twitter" target="_blank" class="tree-info__link badge badge-pill badge-secondary mr-2">
+        <fa-icon [icon]="icons.faTwitter"></fa-icon>
       </a>
     </div>
   </div>
@@ -86,14 +86,14 @@
         El siguiente código sirve para identificar a este árbol:
         <kbd class="mr-1">{{ tree.id }}</kbd>
         <a [href]="'https://www.arboladourbano.com/' + tree.id" target="_blank">
-          <!-- <Icon :icon="['fas', 'external-link-alt']"> -->
+          <fa-icon [icon]="icons.faExternalLinkAlt"></fa-icon>
         </a>
       </p>
       <p>
         Podés usarlo para reportar datos incorrectos enviando el código con
         los comentarios que quieras hacer por medio de
         <a class="text-primary" href="https://www.facebook.com/arboladomapa/" target="_blank">
-          <!-- <Icon :icon="['fab', 'facebook-square']">/arboladomapa -->
+          <fa-icon [icon]="icons.faFacebookSquare">/arboladomapa</fa-icon>
         </a>
         <br>
         ¡Gracias!

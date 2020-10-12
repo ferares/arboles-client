@@ -32,6 +32,9 @@ import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluste
 // ng2-adsense
 import { AdsenseModule } from 'ng2-adsense';
 
+// Font Awesome
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [
@@ -54,6 +57,7 @@ import { AdsenseModule } from 'ng2-adsense';
     LeafletModule,
     LeafletMarkerClusterModule,
     ReactiveFormsModule,
+    FontAwesomeModule,
   ],
   providers: [
     ApiService,

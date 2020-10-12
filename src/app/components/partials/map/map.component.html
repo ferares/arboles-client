@@ -2,6 +2,7 @@
   class="map-container"
   leaflet
   [leafletOptions]="options"
+  [leafletLayers]="layers"
   [leafletMarkerCluster]="treeMarkers"
   [leafletMarkerClusterOptions]="options.clusterOptions"
   (leafletClick)="setMarker($event)">

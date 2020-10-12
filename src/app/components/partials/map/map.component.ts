@@ -11,8 +11,10 @@ import { environment } from '../../../../environments/environment';
 })
 export class MapComponent implements OnChanges {
   @Input() public trees = [];
+  @Input() public displayMarker = false;
   @Output() public markerSet: EventEmitter<L.LatLng> = new EventEmitter();
   @Output() public treeSelected: EventEmitter<L.LatLng> = new EventEmitter();
+  public layers = [];
   public options = {
     center: [-34.618, -58.44],
     clusterOptions: {
@@ -69,6 +71,12 @@ export class MapComponent implements OnChanges {
         );
       }
     }
+
+    if ((changes.displayMarker) && (!this.displayMarker)) {
+      this.layers = [];
+      delete this.marker;
+      delete this.circle;
+    }
   }
 
   private latlngUpdated(map, latlng: L.LatLng): void {
@@ -87,7 +95,8 @@ export class MapComponent implements OnChanges {
       this.marker = new L.Marker([event.latlng.lat, event.latlng.lng], {
         draggable: true,
         riseOnHover: true,
-      }).addTo(map);
+      });
+      this.layers.push(this.marker);
 
       // Create a circle around it to show the search radius
       this.circle = new L.Circle(
@@ -98,7 +107,8 @@ export class MapComponent implements OnChanges {
           fillColor: '#ddd',
           fillOpacity: 0.3,
         },
-      ).addTo(map);
+      );
+      this.layers.push(this.circle);
 
       // When the marker is dragged move the circle to it
       this.marker.on('dragend', (dragEvent) => {

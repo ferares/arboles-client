@@ -26,9 +26,6 @@
       <div class="form-group">
         <h2>
           ¿Qué especie?
-          <a href="#">
-            <!-- <Icon :icon="['far', 'trash-alt']"> -->
-          </a>
         </h2>
         <app-species-select [elements]="species" formControlName="species"></app-species-select>
       </div>
@@ -63,9 +60,13 @@
             Exóticas
           </label>
         </div>
-        <a href="#" id="borrar_origen">
-          <!-- <Icon :icon="['far', 'trash-alt']"> -->
-        </a>
+        <button *ngIf="form.controls.origin.value" type="button" class="btn btn-link py-0" (click)="cleanOrigin()">
+          <span class="sr-only">
+            Borrar selección de origen
+          </span>
+          <fa-icon [icon]="icons.faTrashAlt">
+          </fa-icon>
+        </button>
       </div>
 
       <div class="form-group">

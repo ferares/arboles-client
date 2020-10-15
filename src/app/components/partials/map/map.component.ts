@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import * as L from 'leaflet';
 
@@ -9,9 +9,7 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./map.component.scss'],
   templateUrl: './map.component.html',
 })
-export class MapComponent implements OnChanges {
-  @Input() public trees = [];
-  @Input() public displayMarker = false;
+export class MapComponent {
   @Output() public markerSet: EventEmitter<L.LatLng> = new EventEmitter();
   @Output() public treeSelected: EventEmitter<L.LatLng> = new EventEmitter();
   public layers = [];
@@ -52,31 +50,29 @@ export class MapComponent implements OnChanges {
   }
 
   // When the tree list is updated => update the map
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.trees) {
-      this.treeMarkers = [];
-      for (const tree of this.trees) {
-        let icon = this.defaultIcon;
-        if (tree.icono) {
-          icon = new L.Icon({
-            iconAnchor: [15, 31],
-            iconSize: [30, 34],
-            iconUrl: `assets/imgs/markers/${tree.icono}`,
-          });
-        }
-        this.treeMarkers.push(
-          new L.Marker([tree.lat, tree.lng], { icon }).on('click', () => {
-            this.selectTree(tree.id);
-          }),
-        );
+  public displayTrees(trees: any[]): void {
+    this.treeMarkers = [];
+    for (const tree of trees) {
+      let icon = this.defaultIcon;
+      if (tree.icono) {
+        icon = new L.Icon({
+          iconAnchor: [15, 31],
+          iconSize: [30, 34],
+          iconUrl: `assets/imgs/markers/${tree.icono}`,
+        });
       }
+      this.treeMarkers.push(
+        new L.Marker([tree.lat, tree.lng], { icon }).on('click', () => {
+          this.selectTree(tree.id);
+        }),
+      );
     }
+  }
 
-    if ((changes.displayMarker) && (!this.displayMarker)) {
-      this.layers = [];
-      delete this.marker;
-      delete this.circle;
-    }
+  public removeMarker(): void {
+    this.layers = [];
+    delete this.marker;
+    delete this.circle;
   }
 
   private latlngUpdated(map, latlng: L.LatLng): void {

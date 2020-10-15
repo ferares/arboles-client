@@ -8,12 +8,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Components
+import { HomeComponent } from './components/views/home/home.component';
+
+// Form components
 import { SpeciesSelectComponent } from './components/form-controls/species-select/species-select.component';
-import { AboutComponent } from './components/partials/about/about.component';
+
+// Partial components
 import { FormComponent } from './components/partials/form/form.component';
 import { MapComponent } from './components/partials/map/map.component';
 import { TreeComponent } from './components/partials/tree/tree.component';
-import { HomeComponent } from './components/views/home/home.component';
+
+// Modal components
+import { AboutComponent } from './components/modals/about/about.component';
 
 // Resolvers
 import { SpeciesResolver } from './resolvers/species.resolver';
@@ -24,6 +30,7 @@ import { ApiService } from './services/api.service';
 // ngx-bootstrap
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 // ngx-leaflet
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -52,6 +59,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BrowserAnimationsModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
+    ModalModule.forRoot(),
     AdsenseModule.forRoot(),
     HttpClientModule,
     LeafletModule,

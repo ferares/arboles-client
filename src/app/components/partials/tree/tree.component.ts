@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { faFacebookF, faFacebookSquare, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -13,8 +13,7 @@ import { ApiService } from '../../../services/api.service';
   styleUrls: ['./tree.component.scss'],
   templateUrl: './tree.component.html',
 })
-export class TreeComponent implements OnChanges {
-  @Input() public treeId: number;
+export class TreeComponent {
   public tree;
   public display = false;
   public icons = {
@@ -30,17 +29,15 @@ export class TreeComponent implements OnChanges {
 
   constructor(private apiService: ApiService, private sanitizer: DomSanitizer) { }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if ((changes.treeId) && (changes.treeId.currentValue)) {
-      this.apiService.getTree(this.treeId).subscribe((tree) => {
-        if (!tree.streetview) {
-          tree.streetview = `${this.streetviewUrl}${tree.lat},${tree.lng}`;
-        }
-        tree.streetview = this.sanitizer.bypassSecurityTrustResourceUrl(tree.streetview);
-        this.tree = tree;
-        this.display = true;
-      });
-    }
+  public displayTree(treeId: number): void {
+    console.log(treeId);
+    this.apiService.getTree(treeId).subscribe((tree) => {
+      if (!tree.streetview) {
+        tree.streetview = `${this.streetviewUrl}${tree.lat},${tree.lng}`;
+      }
+      tree.streetview = this.sanitizer.bypassSecurityTrustResourceUrl(tree.streetview);
+      this.tree = tree;
+      this.display = true;
+    });
   }
-
 }

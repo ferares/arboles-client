@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
@@ -13,9 +13,10 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
+  @ViewChild('aboutModal', { static: false }) private aboutModal;
+  @ViewChild('tree', { static: false }) private treeComponent;
+  @ViewChild('map', { static: false }) private mapComponent;
   public species = [];
-  public trees = [];
-  public treeId;
   public latlng: LatLng;
   public adClient = environment.adsenseClient;
   public adSlot = environment.adsenseSlot;
@@ -28,21 +29,25 @@ export class HomeComponent {
     this.species = route.snapshot.data.species;
   }
 
+  public displayAboutModal(): void {
+    this.aboutModal.display();
+  }
+
   public updateLatlng(latlng: LatLng): void {
     this.displayMarker = true;
     this.latlng = latlng;
   }
 
   public updateTrees(trees: any[]): void {
-    this.trees = trees;
-  }
-
-  public updateTree(treeId): void {
-    this.treeId = treeId;
+    this.mapComponent.displayTrees(trees);
   }
 
   public removeMarker(): void {
-    this.displayMarker = false;
+    this.mapComponent.removeMarker();
+  }
+
+  public updateTree(treeId): void {
+    this.treeComponent.displayTree(treeId);
   }
 
 }

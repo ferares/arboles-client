@@ -1,7 +1,7 @@
 <div class="container-fluid h-100">
   <div class="row h-100">
 
-    <app-tree [treeId]="treeId">
+    <app-tree #tree>
     </app-tree>
 
     <aside class="col-12 col-md-4 col-lg-3 py-4">
@@ -27,7 +27,7 @@
           </a>
         </div>
         <div class="col-12 col-sm-3 col-md-6">
-          <button class="btn btn-light btn-small btn-block">
+          <button class="btn btn-light btn-small btn-block" (click)="displayAboutModal()">
             Sobre el mapa
           </button>
         </div>
@@ -54,7 +54,7 @@
     </aside>
 
     <main class="col-md-8 col-lg-9 p-0">
-      <app-map [trees]="trees" [displayMarker]="displayMarker" (markerSet)="updateLatlng($event)" (treeSelected)="updateTree($event)">
+      <app-map #map (markerSet)="updateLatlng($event)" (treeSelected)="updateTree($event)">
       </app-map>
     </main>
 
@@ -63,4 +63,4 @@
 </div>
 
 <!-- Modals -->
-<!-- <About> -->
+<app-about #aboutModal></app-about>

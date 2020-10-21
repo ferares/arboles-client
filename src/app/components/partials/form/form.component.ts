@@ -88,19 +88,19 @@ export class FormComponent implements OnChanges {
       return;
     }
 
+    // Reset info message status
+    this.popoverOpen = false;
+
     // Get the form data and set the selected latlng if any
     const data = this.form.value;
     if (data.marker === '1') {
       data.marker = `${this.latlng.lat} ${this.latlng.lng}`;
-    } else if (!data.species) {
+    } else if ((!data.species) && (data.marker === '0')) {
       // If there's no marker and no species selected =>
       // Don't search, display info message instead
       this.popoverOpen = true;
       return;
     }
-
-    // Reset info message status
-    this.popoverOpen = false;
 
     // Perform the tree search
     this.apiService.search(data).subscribe(

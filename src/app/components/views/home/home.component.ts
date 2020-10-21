@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
@@ -24,8 +25,9 @@ export class HomeComponent {
     faFacebook,
   };
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private titleService: Title) {
     this.species = route.snapshot.data.species;
+    this.titleService.setTitle('Arbolado Urbano');
   }
 
   /**

@@ -10,11 +10,13 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './map.component.html',
 })
 export class MapComponent {
+  // Event emitter for when the user sets or resets a marker on the map
   @Output() public markerSet: EventEmitter<L.LatLng> = new EventEmitter();
+  // Event emitter for when the user clicks on a tree
   @Output() public treeSelected: EventEmitter<L.LatLng> = new EventEmitter();
-  public layers = [];
-  public options = {
-    center: [-34.618, -58.44],
+  public layers = []; // Map layers
+  public options = { // Map options
+    center: [-34.618, -58.44], // BsAs
     clusterOptions: {
       disableClusteringAtZoom: environment.mapDisableClusteringAt,
       maxClusterRadius: 100, // px
@@ -30,16 +32,21 @@ export class MapComponent {
       zoomToBoundsOnClick: true,
     },
     layers: [
-      L.tileLayer(`https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=${environment.mapboxToken}`),
+      L.tileLayer(
+        `https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=${environment.mapboxToken}`,
+        {
+          maxZoom: 21,
+        },
+      ),
     ],
     maxZoom: 21,
     minZoom: 5,
     zoom: 12,
   };
-  public marker: L.Marker;
-  public circle: L.Circle;
-  public treeMarkers: L.Marker[] = [];
-  private defaultIcon: L.Icon;
+  public marker: L.Marker; // Marker
+  public circle: L.Circle; // Circle around marker indicating search radius
+  public treeMarkers: L.Marker[] = []; // Trees from search result
+  private defaultIcon: L.Icon; // Default tree icon
 
   constructor() {
     this.defaultIcon = new L.Icon({
@@ -49,10 +56,14 @@ export class MapComponent {
     });
   }
 
-  // When the tree list is updated => update the map
+  /**
+   * Displays the given trees on the map (discarding previous values)
+   * @param trees - Array with the trees to display info
+   */
   public displayTrees(trees: any[]): void {
-    this.treeMarkers = [];
+    this.treeMarkers = []; // Empty the treeMarkers array
     for (const tree of trees) {
+      // Select the tree's icon or use the default if none
       let icon = this.defaultIcon;
       if (tree.icono) {
         icon = new L.Icon({
@@ -61,20 +72,29 @@ export class MapComponent {
           iconUrl: `assets/imgs/markers/${tree.icono}`,
         });
       }
+      // Add a tree marker for the tree to the treeMarkers
       this.treeMarkers.push(
         new L.Marker([tree.lat, tree.lng], { icon }).on('click', () => {
-          this.selectTree(tree.id);
+          this.selectTree(tree.id); // When the marker is clicked => select it
         }),
       );
     }
   }
 
+  /**
+   * Removes the search marker and it's "search radius" circle from the map
+   */
   public removeMarker(): void {
     this.layers = [];
     delete this.marker;
     delete this.circle;
   }
 
+  /**
+   * Emits an event with the passed latlng value and re-centers the map around those coordinates
+   * @param map - The map object
+   * @param latlng - The latlng coordinates
+   */
   private latlngUpdated(map, latlng: L.LatLng): void {
     // Emit the new marker coordinates
     this.markerSet.emit(latlng);
@@ -82,7 +102,12 @@ export class MapComponent {
     map.panTo(latlng);
   }
 
+  /**
+   * Sets a marker on the map based on a click event coordinates
+   * @param event - Click event
+   */
   public setMarker(event): void {
+    // Get the map object
     const map = event.target;
     // If there's no marker on the map...
     if (!this.marker) {
@@ -110,6 +135,7 @@ export class MapComponent {
       this.marker.on('dragend', (dragEvent) => {
         const latlng = dragEvent.target.getLatLng();
         this.circle.setLatLng(latlng);
+          // Update the selected coordinates
         this.latlngUpdated(map, latlng);
       });
     } else {
@@ -118,11 +144,16 @@ export class MapComponent {
       this.circle.setLatLng([event.latlng.lat, event.latlng.lng]);
     }
 
+    // Update the selected coordinates
     this.latlngUpdated(map, event.latlng);
   }
 
+  /**
+   * Emits an event with the id of a tree
+   * @param id - ID to emit
+   */
   public selectTree(id): void {
-    // Emit the selected tree
+    // Emit the selected tree's ID
     this.treeSelected.emit(id);
   }
 

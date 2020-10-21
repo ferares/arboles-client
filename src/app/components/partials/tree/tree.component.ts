@@ -15,9 +15,9 @@ import { ApiService } from '../../../services/api.service';
 })
 export class TreeComponent {
   private streetviewUrl = `${environment.googleMapsStreetViewUrl}&key=${environment.googleMapsAPIKey}`;
-  public tree;
-  public display = false;
-  public icons = {
+  public tree; // Selected tree's info
+  public display = false; // Display or hide the tree panel
+  public icons = { // Fontawesome icons
     faExternalLinkAlt,
     faFacebookF,
     faFacebookSquare,
@@ -32,6 +32,18 @@ export class TreeComponent {
     private sanitizer: DomSanitizer,
     private cdRef: ChangeDetectorRef,
   ) { }
+
+  /**
+   * Closes the tree panel
+   */
+  public closePanel(): void {
+    // Hide the tree panel
+    this.display = false;
+
+    // Needed for the display = false change to be detected
+    // https://stackoverflow.com/a/40759857/3780276
+    this.cdRef.detectChanges();
+  }
 
   /**
    * Displays a tree's information

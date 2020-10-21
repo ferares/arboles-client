@@ -16,12 +16,11 @@ export class HomeComponent {
   @ViewChild('aboutModal', { static: false }) private aboutModal;
   @ViewChild('tree', { static: false }) private treeComponent;
   @ViewChild('map', { static: false }) private mapComponent;
-  public species = [];
-  public latlng: LatLng;
-  public adClient = environment.adsenseClient;
-  public adSlot = environment.adsenseSlot;
-  public displayMarker = false;
-  public icons = {
+  public species = []; // System species
+  public latlng: LatLng; // Selected latitude and longitude
+  public adClient = environment.adsenseClient; // Adsense
+  public adSlot = environment.adsenseSlot; // Adsense
+  public icons = { // Fontawesome icons
     faFacebook,
   };
 
@@ -29,23 +28,37 @@ export class HomeComponent {
     this.species = route.snapshot.data.species;
   }
 
+  /**
+   * Displays the "about" modal
+   */
   public displayAboutModal(): void {
     this.aboutModal.display();
   }
 
+  /**
+   * Update's the selected latlng
+   */
   public updateLatlng(latlng: LatLng): void {
-    this.displayMarker = true;
     this.latlng = latlng;
   }
 
+  /**
+   * Updates the trees to display
+   */
   public updateTrees(trees: any[]): void {
     this.mapComponent.displayTrees(trees);
   }
 
+  /**
+   * Removes the map marker
+   */
   public removeMarker(): void {
     this.mapComponent.removeMarker();
   }
 
+  /**
+   * Updates the selected tree
+   */
   public updateTree(treeId): void {
     this.treeComponent.displayTree(treeId);
   }

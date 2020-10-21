@@ -12,7 +12,7 @@ import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 })
 export class AboutComponent {
   @ViewChild('modal', { static: false }) private modal: ModalDirective;
-  public icons = {
+  public icons = { // Fontawesome icons
     faCaretRight,
     faFacebook,
     faGithub,
@@ -22,6 +22,9 @@ export class AboutComponent {
 
   constructor() { }
 
+  /**
+   * Displays the component
+   */
   public display(): void {
     this.modal.show();
   }

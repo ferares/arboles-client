@@ -15,6 +15,7 @@ import { SpeciesSelectComponent } from './components/form-controls/species-selec
 
 // Partial components
 import { FormComponent } from './components/partials/form/form.component';
+import { LoaderComponent } from './components/partials/loader/loader.component';
 import { MapComponent } from './components/partials/map/map.component';
 import { TreeComponent } from './components/partials/tree/tree.component';
 
@@ -50,6 +51,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MapComponent,
     FormComponent,
     TreeComponent,
+    LoaderComponent,
     AboutComponent,
     SpeciesSelectComponent,
   ],

@@ -14,9 +14,9 @@ import { ApiService } from '../../../services/api.service';
   templateUrl: './tree.component.html',
 })
 export class TreeComponent {
+  private streetviewUrl = `${environment.googleMapsStreetViewUrl}&key=${environment.googleMapsAPIKey}`;
   public tree;
   public display = false;
-  private streetviewUrl = `${environment.googleMapsStreetViewUrl}&key=${environment.googleMapsAPIKey}`;
   public icons = {
     faExternalLinkAlt,
     faFacebookF,

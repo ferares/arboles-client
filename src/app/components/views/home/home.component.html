@@ -6,7 +6,8 @@
     <app-tree #tree></app-tree>
 
     <aside class="col-12 col-md-4 col-lg-3 py-4">
-      <a class="d-flex flex-row-reverse align-items-center mb-4 justify-content-end" href="/">
+      <div class="d-flex align-items-center mb-4 justify-content-center">
+        <img class="img-fluid mr-4" src="assets/imgs/logo-blanco.png" alt="">
         <h1 class="main-title">
           Arbolado Urbano
           <br>
@@ -14,8 +15,7 @@
             Internacional
           </small>
         </h1>
-        <img class="img-fluid" src="assets/imgs/logo-blanco.png" alt="">
-      </a>
+      </div>
 
       <app-form [species]="species" [latlng]="latlng" (treesLoaded)="updateTrees($event)" (allMapSelected)="removeMarker()">
       </app-form>

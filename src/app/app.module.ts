@@ -21,6 +21,7 @@ import { TreeComponent } from './components/partials/tree/tree.component';
 
 // Modal components
 import { AboutComponent } from './components/modals/about/about.component';
+import { EmptyTreesComponent } from './components/modals/empty-trees/empty-trees.component';
 
 // Resolvers
 import { SpeciesResolver } from './resolvers/species.resolver';
@@ -55,6 +56,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     TreeComponent,
     LoaderComponent,
     AboutComponent,
+    EmptyTreesComponent,
     SpeciesSelectComponent,
   ],
   imports: [

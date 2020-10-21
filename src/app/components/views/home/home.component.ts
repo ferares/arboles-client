@@ -15,6 +15,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class HomeComponent {
   @ViewChild('aboutModal', { static: false }) private aboutModal;
+  @ViewChild('emptyTreesModal', { static: false }) private emptyTreesModal;
   @ViewChild('tree', { static: false }) private treeComponent;
   @ViewChild('map', { static: false }) private mapComponent;
   public species = []; // System species
@@ -48,6 +49,11 @@ export class HomeComponent {
    * Updates the trees to display
    */
   public updateTrees(trees: any[]): void {
+    if (!trees.length) {
+      // If there are no trees to display show an info modal with some help
+      this.emptyTreesModal.display();
+    }
+
     this.mapComponent.displayTrees(trees);
   }
 

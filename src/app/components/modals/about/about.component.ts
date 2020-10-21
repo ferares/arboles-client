@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { ModalDirective } from 'ngx-bootstrap/modal';
 

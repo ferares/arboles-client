@@ -2,8 +2,12 @@
   position: relative;
 }
 
-.dropdown-menu {
-  max-height: 400px;
+.species-dropdown {
   min-width: 100%;
+}
+
+.species-dropdown__list {
+  max-height: 400px;
   overflow: auto;
+  padding: 0;
 }

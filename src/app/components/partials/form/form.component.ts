@@ -22,6 +22,9 @@ export class FormComponent implements OnChanges {
   public isCollapsed = true; // Indicates if the "more filters" section is collapsed
   public validated = false; // Indicates if the form has been validated
   public form: FormGroup; // Search form
+  public popoverText = 'Para buscar, empezá marcando un punto en el mapa. O podés buscar en toda la ciudad si seleccionás alguna especie.';
+  public popoverTitle = 'Opa, ¡esos son muchos árboles!';
+  public popoverOpen = false;
   public icons = { // Fontawesome icons
     faTrashAlt,
   };
@@ -89,7 +92,15 @@ export class FormComponent implements OnChanges {
     const data = this.form.value;
     if (data.marker === '1') {
       data.marker = `${this.latlng.lat} ${this.latlng.lng}`;
+    } else if (!data.species) {
+      // If there's no marker and no species selected =>
+      // Don't search, display info message instead
+      this.popoverOpen = true;
+      return;
     }
+
+    // Reset info message status
+    this.popoverOpen = false;
 
     // Perform the tree search
     this.apiService.search(data).subscribe(

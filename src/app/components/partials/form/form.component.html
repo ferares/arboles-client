@@ -13,8 +13,8 @@
             En todo el mapa
           </label>
         </div>
-        <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="marker-point" formControlName="marker" class="custom-control-input" value="1">
+        <div class="custom-control custom-radio custom-control-inline" tooltip="Hacé click en el mapa para colocar una marca.">
+          <input type="radio" id="marker-point" formControlName="marker" class="custom-control-input" value="1" disabled>
           <label class="custom-control-label" for="marker-point">
             Marcar en el mapa
           </label>
@@ -116,7 +116,14 @@
       </button>
     </div>
   </div>
-  <button type="button" class="btn btn-primary btn-lg btn-block mt-4" (click)="search()">
+  <button type="button" class="btn btn-primary btn-lg btn-block mt-4" (click)="search()" [popover]="popoverTemplate" [popoverTitle]="popoverTitle" triggers="" [isOpen]="popoverOpen" [outsideClick]="true">
     Buscar
   </button>
+  <ng-template #popoverTemplate>
+    Para buscar, empezá marcando un punto en el mapa.
+    <br>
+    <small>
+      Consejo piola: Podés buscar en toda la ciudad si seleccionás alguna especie.
+    </small>
+  </ng-template>
 </form>

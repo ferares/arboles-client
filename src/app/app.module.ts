@@ -32,6 +32,8 @@ import { ApiService } from './services/api.service';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 // ngx-leaflet
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -62,6 +64,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
+    PopoverModule.forRoot(),
+    TooltipModule.forRoot(),
     AdsenseModule.forRoot(),
     HttpClientModule,
     LeafletModule,

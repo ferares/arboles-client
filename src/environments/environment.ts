@@ -5,8 +5,9 @@
 export const environment = {
   adsenseClient: 'ca-pub-7228206495347837',
   adsenseSlot: '8591261973',
-  apiUrl: 'https://arbolado.ares.uy/public/',
+  apiUrl: 'http://localhost:8080',
   googleMapsAPIKey: 'AIzaSyDfB7v0px8LqJ3UXBP4yNZ374KQZVEAZ-Y',
+  googleMapsStreetViewUrl: 'https://www.google.com/maps/embed/v1/streetview?heading=210&pitch=10&fov=35',
   highlightColor: '#5cba9d',
   mapDisableClusteringAt: 21,
   mapboxToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',

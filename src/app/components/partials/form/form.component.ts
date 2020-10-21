@@ -74,7 +74,7 @@ export class FormComponent implements OnChanges {
     }
 
     const data = this.form.value;
-    if (data.marker) {
+    if (data.marker === '1') {
       data.marker = `${this.latlng.lat} ${this.latlng.lng}`;
     }
 

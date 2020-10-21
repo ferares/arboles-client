@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { faFacebookF, faFacebookSquare, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -16,6 +16,7 @@ import { ApiService } from '../../../services/api.service';
 export class TreeComponent {
   public tree;
   public display = false;
+  private streetviewUrl = `${environment.googleMapsStreetViewUrl}&key=${environment.googleMapsAPIKey}`;
   public icons = {
     faExternalLinkAlt,
     faFacebookF,
@@ -25,19 +26,37 @@ export class TreeComponent {
     faMapMarkerAlt,
     faTwitter,
   };
-  private streetviewUrl = `https://www.google.com/maps/embed/v1/streetview?heading=210&pitch=10&fov=35&key=${environment.googleMapsAPIKey}&location=`;
 
-  constructor(private apiService: ApiService, private sanitizer: DomSanitizer) { }
+  constructor(
+    private apiService: ApiService,
+    private sanitizer: DomSanitizer,
+    private cdRef: ChangeDetectorRef,
+  ) { }
 
+  /**
+   * Displays a tree's information
+   * @param treeId - ID of the tree to display
+   */
   public displayTree(treeId: number): void {
-    console.log(treeId);
+    // Get the tree's info
     this.apiService.getTree(treeId).subscribe((tree) => {
+      // If there's no streetview URL for the tree, use its coordinates
       if (!tree.streetview) {
-        tree.streetview = `${this.streetviewUrl}${tree.lat},${tree.lng}`;
+        tree.streetview = `${this.streetviewUrl}&location=${tree.lat},${tree.lng}`;
       }
+
+      // Sanitize the streetview URL
       tree.streetview = this.sanitizer.bypassSecurityTrustResourceUrl(tree.streetview);
+
+      // Set the tree
       this.tree = tree;
+
+      // Display the tree panel
       this.display = true;
+
+      // Needed for the display = true change to be detected
+      // https://stackoverflow.com/a/40759857/3780276
+      this.cdRef.detectChanges();
     });
   }
 }

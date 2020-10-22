@@ -60,8 +60,13 @@
     </main>
 
   </div>
+  <button type="button" class="btn btn-primary add-tree-btn" (click)="displayAddTreeModal()">
+    <fa-icon [icon]="icons.faPlusSquare"></fa-icon>
+    Agregar árbol
+  </button>
 </div>
 
 <!-- Modals -->
 <app-about #aboutModal></app-about>
 <app-empty-trees #emptyTreesModal></app-empty-trees>
+<app-add-tree #addTreeModal></app-add-tree>

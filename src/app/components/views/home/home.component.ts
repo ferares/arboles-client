@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { LatLng } from 'leaflet';
 
@@ -16,6 +17,7 @@ import { environment } from '../../../../environments/environment';
 export class HomeComponent {
   @ViewChild('aboutModal', { static: false }) private aboutModal;
   @ViewChild('emptyTreesModal', { static: false }) private emptyTreesModal;
+  @ViewChild('addTreeModal', { static: false }) private addTreeModal;
   @ViewChild('tree', { static: false }) private treeComponent;
   @ViewChild('map', { static: false }) private mapComponent;
   public species = []; // System species
@@ -24,6 +26,7 @@ export class HomeComponent {
   public adSlot = environment.adsenseSlot; // Adsense
   public icons = { // Fontawesome icons
     faFacebook,
+    faPlusSquare,
   };
 
   constructor(private route: ActivatedRoute, private titleService: Title) {
@@ -36,6 +39,13 @@ export class HomeComponent {
    */
   public displayAboutModal(): void {
     this.aboutModal.display();
+  }
+
+  /**
+   * Displays the "add tree" modal
+   */
+  public displayAddTreeModal(): void {
+    this.addTreeModal.display();
   }
 
   /**

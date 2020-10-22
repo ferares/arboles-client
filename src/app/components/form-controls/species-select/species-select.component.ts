@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, forwardRef, Input, OnChanges, SimpleChanges, ViewChildren } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -11,21 +11,33 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   styleUrls: ['./species-select.component.scss'],
   templateUrl: './species-select.component.html',
 })
-export class SpeciesSelectComponent implements ControlValueAccessor, OnChanges {
+export class SpeciesSelectComponent implements ControlValueAccessor, OnChanges, AfterViewInit {
+  @ViewChildren('dropdownMenu') private dropdownMenu;
   @Input() public elements: any[]; // Select dropdown options
+  private searchInput;
+  public search = '';
   public filteredElements: any[]; // Select dropdown options filtered
   public value: any; // Selected value
   public label: string; // Selected label
   public disabled: boolean;
   public onChanged: any = () => {};
   public onTouched: any = () => {};
-  public search = '';
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.elements) {
       // Make the filtered elements the same as the elements
       this.filteredElements = this.elements;
     }
+  }
+
+  public ngAfterViewInit(): void {
+    // When the dropdown opens for the first time it's children appear on the DOM
+    this.dropdownMenu.changes.subscribe((elements) => {
+      // Save a reference to the search input for future use
+      this.searchInput = elements.first.nativeElement.firstChild.firstChild;
+      // Focus on the search input
+      this.searchInput.focus();
+    });
   }
 
   public writeValue(value: any): void {
@@ -60,6 +72,17 @@ export class SpeciesSelectComponent implements ControlValueAccessor, OnChanges {
     this.label = label;
     this.onTouched();
     this.onChanged(this.value);
+  }
+
+  /**
+   * Focus on the search input
+   */
+  public setFocus(): void {
+    // If the search input has been set...
+    if (this.searchInput) {
+      // ...focus on it
+      this.searchInput.focus();
+    }
   }
 
   /**

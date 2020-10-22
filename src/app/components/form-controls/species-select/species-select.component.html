@@ -1,8 +1,8 @@
-<div class="btn-group" dropdown>
+<div class="btn-group" dropdown (onShown)="setFocus()">
   <button id="species-dropdown-btn" type="button" class="custom-select text-left" dropdownToggle aria-controls="species-dropdown">
     {{ label }} &nbsp;
   </button>
-  <div id="species-dropdown" class="dropdown-menu species-dropdown" *dropdownMenu role="menu">
+  <div id="species-dropdown" class="dropdown-menu species-dropdown pb-0" *dropdownMenu role="menu" #dropdownMenu>
     <div class="p-2 pt-0" (click)="$event.stopPropagation()">
       <input class="w-100" type="text" [(ngModel)]="search" (keyup)="filter()">
     </div>

@@ -1,27 +1,43 @@
-# ArbolesClient
+# Arbolado Urbano
+https://www.arboladourbano.com/
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.4.
+Arbolado Urbano es una herramienta web interactiva que reúne censos del arbolado en diferentes localidades. Permite el fácil acceso a información como la ubicación y la especie de los árboles que se encuentran en espacios públicos.
 
-## Development server
+## Arbolado Urbano - Cliente
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Este proyecto contiene el código fuente del cliente del sitio de https://www.arboladourbano.com/. El mismo está desarrollado utilizando:
 
-## Code scaffolding
+- [Angular](https://angular.io/)
+- [Bootstrap](https://getbootstrap.com/)
+- [Leaflet](https://leafletjs.com/)
+- [ngx-bootstrap](https://valor-software.com/ngx-bootstrap/)
+- [ngx-leaflet](https://github.com/Asymmetrik/ngx-leaflet)
+- [fontawesome](https://fontawesome.com/)
+- [ng2-adsense](https://github.com/scttcper/ng2-adsense)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Puesta en marcha
 
-## Build
+#### Prerequisitos para instalación:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+- Instalar [git](https://git-scm.com/)
+- Instalar [Node.js y npm](https://nodejs.org/)
 
-## Running unit tests
+#### Prerequisito para ejecución:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Tener corriendo una instancia local del proyecto [Arbolado Urbano - API](https://github.com/ferares/arboles-api)
 
-## Running end-to-end tests
+#### Instalación y ejecución:
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+1. Clonar el repo `git clone git@github.com:ferares/arboles-client.git`
+2. Instalar dependencias `npm install`
+3. Levantar el servidor local `npm start`
+4. Visitar `localhost:4200` en un navegador.
 
-## Further help
+## Más información
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+* [IG/arbolado.urbano](https://www.instagram.com/arbolado.urbano/)
+* [FB/arboladomapa](https://www.facebook.com/arboladomapa/)
+* [TW/arboladomapa](https://twitter.com/arboladomapa)
+
+### Contacto
+https://martinsimonyan.com/contacto/

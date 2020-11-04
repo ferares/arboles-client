@@ -3,7 +3,10 @@
   leaflet
   [leafletOptions]="options"
   [leafletLayers]="layers"
-  [leafletMarkerCluster]="treeMarkers"
+  [leafletMarkerCluster]="treeMarkers.getLayers()"
   [leafletMarkerClusterOptions]="options.clusterOptions"
-  (leafletClick)="setMarker($event)">
+  [leafletFitBounds]="mapFitToBounds"
+  [leafletFitBoundsOptions]="mapFitToBoundsOptions"
+  (leafletClick)="setMarker($event)"
+  (leafletMapReady)="onMapReady($event)">
 </div>

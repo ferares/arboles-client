@@ -14,7 +14,10 @@ export class MapComponent {
   @Output() public markerSet: EventEmitter<L.LatLng> = new EventEmitter();
   // Event emitter for when the user clicks on a tree
   @Output() public treeSelected: EventEmitter<L.LatLng> = new EventEmitter();
+  public map: L.Map; // Map reference
   public layers = []; // Map layers
+  public mapFitToBounds: L.LatLngBounds; // To zoom into search results
+  public mapFitToBoundsOptions: L.FitBoundsOptions = { maxZoom: 15, animate: true }; // To zoom into search results
   public options = { // Map options
     center: [-34.618, -58.44], // BsAs
     clusterOptions: {
@@ -35,6 +38,9 @@ export class MapComponent {
       L.tileLayer(
         `https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=${environment.mapboxToken}`,
         {
+          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+          '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+          'Imagery © <a href="http://mapbox.com">Mapbox</a>',
           maxZoom: 21,
         },
       ),
@@ -45,7 +51,7 @@ export class MapComponent {
   };
   public marker: L.Marker; // Marker
   public circle: L.Circle; // Circle around marker indicating search radius
-  public treeMarkers: L.Marker[] = []; // Trees from search result
+  public treeMarkers: L.FeatureGroup = L.featureGroup(); // Trees from search result
   private defaultIcon: L.Icon; // Default tree icon
 
   constructor() {
@@ -56,12 +62,16 @@ export class MapComponent {
     });
   }
 
+  public onMapReady(map: L.Map): void {
+    this.map = map;
+  }
+
   /**
    * Displays the given trees on the map (discarding previous values)
    * @param trees - Array with the trees to display info
    */
   public displayTrees(trees: any[]): void {
-    this.treeMarkers = []; // Empty the treeMarkers array
+    this.treeMarkers.clearLayers(); // Remove all previous trees
     for (const tree of trees) {
       // Select the tree's icon or use the default if none
       let icon = this.defaultIcon;
@@ -73,11 +83,16 @@ export class MapComponent {
         });
       }
       // Add a tree marker for the tree to the treeMarkers
-      this.treeMarkers.push(
+      this.treeMarkers.addLayer(
         new L.Marker([tree.lat, tree.lng], { icon }).on('click', () => {
           this.selectTree(tree.id); // When the marker is clicked => select it
         }),
       );
+    }
+
+    // Center the map on the results
+    if ((this.map) && (this.treeMarkers.getLayers().length)) {
+      this.mapFitToBounds = this.treeMarkers.getBounds();
     }
   }
 

@@ -7,6 +7,8 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { LatLng } from 'leaflet';
 
+import { NominatimService } from '../../../services/nominatim.service';
+
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -20,6 +22,8 @@ export class HomeComponent {
   @ViewChild('addTreeModal', { static: false }) private addTreeModal;
   @ViewChild('tree', { static: false }) private treeComponent;
   @ViewChild('map', { static: false }) private mapComponent;
+  public addressSearch = '';
+  public addressResults = [];
   public species = []; // System species
   public latlng: LatLng; // Selected latitude and longitude
   public adClient = environment.adsenseClient; // Adsense
@@ -29,7 +33,11 @@ export class HomeComponent {
     faPlusSquare,
   };
 
-  constructor(private route: ActivatedRoute, private titleService: Title) {
+  constructor(
+    private route: ActivatedRoute,
+    private titleService: Title,
+    private nominatimService: NominatimService,
+  ) {
     this.species = route.snapshot.data.species;
     this.titleService.setTitle('Arbolado Urbano');
   }
@@ -68,6 +76,13 @@ export class HomeComponent {
   }
 
   /**
+   * Sets the map marker
+   */
+  public setMarker(latlng: LatLng): void {
+    this.mapComponent.setMarker(latlng);
+  }
+
+  /**
    * Removes the map marker
    */
   public removeMarker(): void {
@@ -79,6 +94,24 @@ export class HomeComponent {
    */
   public updateTree(treeId): void {
     this.treeComponent.displayTree(treeId);
+  }
+
+  public selectAddress(latlng: LatLng): void {
+    this.setMarker(latlng);
+    this.addressSearch = '';
+    this.addressResults = [];
+  }
+
+  /**
+   * Looks for an address or place
+   */
+  public addressLookup(event): void {
+    if ((event.keyCode === 13) && (this.addressSearch)) {
+      const bounds = this.mapComponent.getMapBounds();
+      this.nominatimService.addressLookup(this.addressSearch, bounds).subscribe(
+        (results) => this.addressResults = results,
+      );
+    }
   }
 
 }

@@ -62,8 +62,19 @@ export class MapComponent {
     });
   }
 
+  /**
+   * Stores a reference of the Leaflet map
+   * @param map - Reference to the Leaflet map
+   */
   public onMapReady(map: L.Map): void {
     this.map = map;
+  }
+
+  /**
+   * Returns the current bounds of the map
+   */
+   public getMapBounds(): L.LatLngBounds {
+    return this.map ? this.map.getBounds() : undefined;
   }
 
   /**
@@ -121,46 +132,47 @@ export class MapComponent {
    * Sets a marker on the map based on a click event coordinates
    * @param event - Click event
    */
-  public setMarker(event): void {
+  public setMarker(latlng: L.LatLng): void {
     // Get the map object
-    const map = event.target;
-    // If there's no marker on the map...
-    if (!this.marker) {
-      L.Icon.Default.imagePath = 'assets/imgs/markers/';
-      // Create a new marker
-      this.marker = new L.Marker([event.latlng.lat, event.latlng.lng], {
-        draggable: true,
-        riseOnHover: true,
-      });
-      this.layers.push(this.marker);
+    if (this.map) {
+      // If there's no marker on the map...
+      if (!this.marker) {
+        L.Icon.Default.imagePath = 'assets/imgs/markers/';
+        // Create a new marker
+        this.marker = new L.Marker([latlng.lat, latlng.lng], {
+          draggable: true,
+          riseOnHover: true,
+        });
+        this.layers.push(this.marker);
 
-      // Create a circle around it to show the search radius
-      this.circle = new L.Circle(
-        [event.latlng.lat, event.latlng.lng],
-        environment.searchRadius,
-        {
-          color: '#000',
-          fillColor: '#ddd',
-          fillOpacity: 0.3,
-        },
-      );
-      this.layers.push(this.circle);
+        // Create a circle around it to show the search radius
+        this.circle = new L.Circle(
+          [latlng.lat, latlng.lng],
+          environment.searchRadius,
+          {
+            color: '#000',
+            fillColor: '#ddd',
+            fillOpacity: 0.3,
+          },
+        );
+        this.layers.push(this.circle);
 
-      // When the marker is dragged move the circle to it
-      this.marker.on('dragend', (dragEvent) => {
-        const latlng = dragEvent.target.getLatLng();
-        this.circle.setLatLng(latlng);
+        // When the marker is dragged move the circle to it
+        this.marker.on('dragend', (dragEvent) => {
+          const newLatlng = dragEvent.target.getLatLng();
+          this.circle.setLatLng(newLatlng);
           // Update the selected coordinates
-        this.latlngUpdated(map, latlng);
-      });
-    } else {
-      // If a marker already exists, move it and its circle
-      this.marker.setLatLng([event.latlng.lat, event.latlng.lng]);
-      this.circle.setLatLng([event.latlng.lat, event.latlng.lng]);
-    }
+          this.latlngUpdated(this.map, newLatlng);
+        });
+      } else {
+        // If a marker already exists, move it and its circle
+        this.marker.setLatLng([latlng.lat, latlng.lng]);
+        this.circle.setLatLng([latlng.lat, latlng.lng]);
+      }
 
-    // Update the selected coordinates
-    this.latlngUpdated(map, event.latlng);
+      // Update the selected coordinates
+      this.latlngUpdated(this.map, latlng);
+    }
   }
 
   /**

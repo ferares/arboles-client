@@ -29,6 +29,7 @@ import { SpeciesResolver } from './resolvers/species.resolver';
 
 // Services
 import { ApiService } from './services/api.service';
+import { NominatimService } from './services/nominatim.service';
 
 // ngx-bootstrap
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -80,6 +81,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   providers: [
     ApiService,
+    NominatimService,
     SpeciesResolver,
     Title,
   ],

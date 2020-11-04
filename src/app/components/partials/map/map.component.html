@@ -7,6 +7,6 @@
   [leafletMarkerClusterOptions]="options.clusterOptions"
   [leafletFitBounds]="mapFitToBounds"
   [leafletFitBoundsOptions]="mapFitToBoundsOptions"
-  (leafletClick)="setMarker($event)"
+  (leafletClick)="setMarker($event.latlng)"
   (leafletMapReady)="onMapReady($event)">
 </div>

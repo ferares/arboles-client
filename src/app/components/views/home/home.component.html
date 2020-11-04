@@ -57,10 +57,22 @@
     </main>
 
   </div>
-  <button type="button" class="btn btn-primary add-tree-btn" (click)="displayAddTreeModal()">
-    <fa-icon [icon]="icons.faPlusSquare"></fa-icon>
-    Agregar árbol
-  </button>
+  <div class="floating-content">
+    <button type="button" class="btn btn-primary mb-2" (click)="displayAddTreeModal()">
+      <fa-icon [icon]="icons.faPlusSquare"></fa-icon>
+      Agregar árbol
+    </button>
+    <div class="address-search">
+      <input type="text" class="form-control" [(ngModel)]="addressSearch" value="" (keyup)="addressLookup($event)" placeholder="Buscá un lugar">
+      <ol class="address-search__list list-unstyled mt-1">
+        <li *ngFor="let result of addressResults" class="address-search__item">
+          <button type="button" class="btn btn-link address-search__item__btn" (click)="selectAddress(result.latlng)">
+            {{ result.displayName }}
+          </button>
+        </li>
+      </ol>
+    </div>
+  </div>
 </div>
 
 <!-- Modals -->

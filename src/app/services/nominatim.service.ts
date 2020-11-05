@@ -22,15 +22,29 @@ export class NominatimService {
    * Looks up an address or place and returns its coordinates.
    * @param query - The query to perform.
    */
-  public addressLookup(query: string, bounds?: any): Observable<NominatimResponse[]> {
-    const boundBox = bounds ? `&viewbox=${bounds.toBBoxString()}&bounded=1` : '';
-    const url = `https://${NOMINATIM_URL}/search?format=json&q=${query}${boundBox}`;
-    return this.http.get(url).pipe(map((data: any[]) => data.map(
-      (item: any) => new NominatimResponse(
-        new LatLng(item.lat, item.lon),
-        item.display_name,
+  public addressLookup(query: string, bounds: any): Observable<NominatimResponse[]> {
+    const options = {
+      params: {
+        'accept-language': 'es',
+        addressdetails: '1',
+        bounded: '1',
+        format: 'json',
+        q: query,
+        viewbox: bounds.toBBoxString(),
+      },
+    };
+    return this.http.get<NominatimResponse[]>(`https://${NOMINATIM_URL}/search`, options).pipe(
+      map(
+        (data: any[]) => data.map(
+          (item: any) => new NominatimResponse(
+            new LatLng(item.lat, item.lon),
+            item.display_name,
+            item.type,
+            item.address,
+          ),
+        ),
       ),
-    )));
+    );
   }
 
 }

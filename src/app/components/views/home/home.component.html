@@ -65,8 +65,8 @@
     <div class="address-search">
       <input type="text" class="form-control" [(ngModel)]="addressSearch" value="" (keyup)="addressLookup($event)" placeholder="Buscá un lugar">
       <ol class="address-search__list list-unstyled mt-1">
-        <li *ngFor="let result of addressResults" class="address-search__item">
-          <button type="button" class="btn btn-link address-search__item__btn" (click)="selectAddress(result.latlng)">
+        <li *ngFor="let result of addressResults; let i = index;" class="address-search__item">
+          <button type="button" class="btn btn-link address-search__item__btn text-truncate w-100" (click)="selectAddress(i)">
             {{ result.displayName }}
           </button>
         </li>

@@ -24,6 +24,7 @@ export class HomeComponent {
   @ViewChild('map', { static: false }) private mapComponent;
   public addressSearch = '';
   public addressResults = [];
+  public addressSearching = false;
   public species = []; // System species
   public latlng: LatLng; // Selected latitude and longitude
   public adClient = environment.adsenseClient; // Adsense
@@ -112,10 +113,14 @@ export class HomeComponent {
   public addressLookup(event): void {
     // If keypressed was "Intro" & there's an input
     if ((event.keyCode === 13) && (this.addressSearch)) {
+      this.addressSearching = true; // Display the loading indicator
       const bounds = this.mapComponent.getMapBounds(); // Get the current map bounds
       // Search withing the map bounds
       this.nominatimService.addressLookup(this.addressSearch, bounds).subscribe(
-        (results) => this.addressResults = results, // Load the search results
+        (results) => {
+          this.addressResults = results; // Load the search results
+          this.addressSearching = false; // Hide the loading indicator
+        },
       );
     }
   }

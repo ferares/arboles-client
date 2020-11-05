@@ -63,7 +63,14 @@
       Agregar árbol
     </button>
     <div class="address-search">
-      <input type="text" class="form-control" [(ngModel)]="addressSearch" value="" (keyup)="addressLookup($event)" placeholder="Buscá un lugar">
+      <div class="address-search__input-wrapper">
+        <div  *ngIf="addressSearching" class="address-search__loader">
+          <div class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="sr-only">Cargando...</span>
+          </div>
+        </div>
+        <input type="text" class="form-control" [(ngModel)]="addressSearch" value="" (keyup)="addressLookup($event)" placeholder="Buscá un lugar">
+      </div>
       <ol class="address-search__list list-unstyled mt-1">
         <li *ngFor="let result of addressResults; let i = index;" class="address-search__item">
           <button type="button" class="btn btn-link address-search__item__btn text-truncate w-100" (click)="selectAddress(i)">

@@ -8,6 +8,19 @@
   z-index: 1;
 }
 
+.address-search__input-wrapper {
+  position: relative;
+}
+
+.address-search__loader {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  position: absolute;
+  right: 12px;
+  top: 0;
+}
+
 .address-search__list {
   background-color: $color-white;
   max-width: 100%;

@@ -2,8 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
-
 import { ApiService } from '../../../services/api.service';
 
 @Component({
@@ -14,9 +12,6 @@ import { ApiService } from '../../../services/api.service';
 export class LoaderComponent implements OnDestroy, OnInit {
   private suscripcion: Subscription; // Subscription for the system's loading state.
   public active = false; // Display or hide the loading indicator
-  public icons = {
-    faCircleNotch,
-  };
 
   constructor(private apiService: ApiService) {}
 

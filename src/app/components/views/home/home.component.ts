@@ -1,9 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
-import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faChevronUp, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { LatLng } from 'leaflet';
 
@@ -17,11 +17,12 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-  @ViewChild('aboutModal', { static: false }) private aboutModal;
-  @ViewChild('emptyTreesModal', { static: false }) private emptyTreesModal;
-  @ViewChild('addTreeModal', { static: false }) private addTreeModal;
-  @ViewChild('tree', { static: false }) private treeComponent;
-  @ViewChild('map', { static: false }) private mapComponent;
+  @ViewChild('aboutModal') private aboutModal;
+  @ViewChild('emptyTreesModal') private emptyTreesModal;
+  @ViewChild('addTreeModal') private addTreeModal;
+  @ViewChild('tree') private treeComponent;
+  @ViewChild('map') private mapComponent;
+  @ViewChild('main', { read: ElementRef }) private mainElement;
   public addressSearch = '';
   public addressResults = [];
   public addressSearching = false;
@@ -30,6 +31,7 @@ export class HomeComponent {
   public adClient = environment.adsenseClient; // Adsense
   public adSlot = environment.adsenseSlot; // Adsense
   public icons = { // Fontawesome icons
+    faChevronUp,
     faFacebook,
     faPlusSquare,
   };
@@ -73,7 +75,10 @@ export class HomeComponent {
       this.emptyTreesModal.display();
     }
 
+    // Display the trees on the map
     this.mapComponent.displayTrees(trees);
+    // Scroll the map into view
+    this.scrollTo(this.mainElement.nativeElement);
   }
 
   /**
@@ -95,6 +100,15 @@ export class HomeComponent {
    */
   public updateTree(treeId): void {
     this.treeComponent.displayTree(treeId);
+  }
+
+  /**
+   * Scrolls an element into view
+   * @param element - Element to scroll to
+   */
+  public scrollTo(element: any): void {
+    // Scroll element into view
+    element.scrollIntoView({ behavior: 'smooth' });
   }
 
   /**

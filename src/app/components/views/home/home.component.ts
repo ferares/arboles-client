@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
-import { faChevronUp, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faChevronUp, faPlusSquare, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { LatLng } from 'leaflet';
 
@@ -34,6 +34,7 @@ export class HomeComponent {
     faChevronUp,
     faFacebook,
     faPlusSquare,
+    faSearch,
   };
 
   constructor(
@@ -125,8 +126,8 @@ export class HomeComponent {
    * Looks for an address or place
    */
   public addressLookup(event): void {
-    // If keypressed was "Intro" & there's an input
-    if ((event.keyCode === 13) && (this.addressSearch)) {
+    // If keypressed was "Intro" or it's a "click" event & there's an input
+    if (((event.type === 'click') || (event.keyCode === 13)) && (this.addressSearch)) {
       this.addressSearching = true; // Display the loading indicator
       const bounds = this.mapComponent.getMapBounds(); // Get the current map bounds
       // Search withing the map bounds

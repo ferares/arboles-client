@@ -12,7 +12,11 @@
   position: relative;
 }
 
-.address-search__loader {
+.address-search__input {
+  padding-right: 40px;
+}
+
+.address-search__icon {
   align-items: center;
   bottom: 0;
   display: flex;

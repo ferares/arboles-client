@@ -42,7 +42,9 @@ export default class Arbolado {
   async fetch(url: string, method: string = 'GET', body?: BodyInit, headers?: HeadersInit, loadingIndicator: boolean = true) {
     if (loadingIndicator) this.setLoading(true)
     try {
-      return await fetch(url, { method, headers, body })
+      const response = await fetch(url, { method, headers, body })
+      if ((response.status >= 400)) throw response
+      return response
     } catch (error) {
       console.error(error)
     } finally {
@@ -102,5 +104,17 @@ export default class Arbolado {
     if (this.bodyScrollHide === 0) {
       document.body.classList.remove('disable-scroll')
     }
+  }
+
+  loadSourceFromURL() {
+    const path = window.location.pathname.split('/')
+    if (path[1] !== 'fuente') return
+    const fuenteUrl = path[2]
+    if (!fuenteUrl) return
+    window.Arbolado.fetchJson(`${import.meta.env.VITE_API_URL}/fuentes/${fuenteUrl}`, 'GET').then((trees) => {
+      if (!trees?.length) return
+      window.Arbolado.emitEvent(document, 'arbolado/results:updated', { trees })
+      window.scrollTo({ top: 0, behavior: 'smooth' }) // Scroll up to the map (for mobile)
+    })
   }
 }

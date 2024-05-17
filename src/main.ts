@@ -13,7 +13,7 @@ import GoogleAds from './elements/GoogleAds'
 declare global {
   interface Window {
     Arbolado: Arbolado,
-    adsbygoogle: any,
+    adsbygoogle: any, //qué hace esto?
   }
 }
 

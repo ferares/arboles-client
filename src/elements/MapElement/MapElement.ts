@@ -1,17 +1,22 @@
 import * as L from 'leaflet'
 import 'leaflet.markercluster'
 
-import Tree from '../types/Tree'
+import MarkerPopupTemplate from './MarkerPopup.html?raw'
+
+import Tree from '../../types/Tree'
+import GeoBtn from '../GeoBtn/GeoBtn'
+
+const { VITE_MAPBOX_TOKEN: accessToken } = import.meta.env
 
 const environment = {
   highlightColor: '#5cba9d',
   mapDisableClusteringAt: 21,
-  mapboxToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
   searchRadius: 1000,
 }
 
 export default class MapElement extends HTMLElement {
-  private map: L.Map // Map reference
+  private geoBtn: GeoBtn
+  private map!: L.Map // Map reference
   private mapFitToBoundsOptions: L.FitBoundsOptions = { maxZoom: 15, padding: [15, 15] } // To zoom into search results
   private options: L.MapOptions = { // Map options
     center: L.latLng(-34.618, -58.44), // BsAs
@@ -19,7 +24,7 @@ export default class MapElement extends HTMLElement {
       L.tileLayer(
         'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
         {
-          accessToken: environment.mapboxToken,
+          accessToken,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
           subdomains: 'abcd',
           maxZoom: 21
@@ -28,7 +33,7 @@ export default class MapElement extends HTMLElement {
     ],
     maxZoom: 21,
     minZoom: 5,
-    zoom: 12,
+    zoom: 13,
   }
   private clusterOptions = {
     disableClusteringAtZoom: environment.mapDisableClusteringAt,
@@ -44,10 +49,9 @@ export default class MapElement extends HTMLElement {
     spiderfyDistanceMultiplier: 2,
     zoomToBoundsOnClick: true,
   }
-  private markerPopupTemplate: HTMLTemplateElement
   private marker?: L.Marker // Marker
   private circle?: L.Circle // Circle around marker indicating search radius
-  private treeMarkers: L.MarkerClusterGroup // Trees from search result
+  private treeMarkers!: L.MarkerClusterGroup // Trees from search result
   private icons: { [key: string]: L.Icon } = {
     default: new L.Icon({
       iconAnchor: [15, 31],
@@ -58,15 +62,29 @@ export default class MapElement extends HTMLElement {
 
   constructor() {
     super()
+    this.geoBtn = document.querySelector('[js-map-geo-btn]') as GeoBtn
+    this.geoBtn.addEventListener('arbolado:geo/searching', () => this.setLoading(true))
+    this.geoBtn.addEventListener('arbolado:geo/error', () => this.setLoading(false))
+    this.geoBtn.addEventListener('arbolado:geo/success', (event) => {
+      this.setLoading(false)
+      const data = (event as CustomEvent).detail
+      const latLng = new L.LatLng(data.lat, data.lng)
+      this.setMarker(latLng)
+    })
+    this.initMap()
+  }
+
+  private async initMap() {
     this.treeMarkers = L.markerClusterGroup(this.clusterOptions)
-    this.map = L.map('map', this.options)
+    const options = { ...this.options }
+    const center = await this.getLocationFromURL()
+    if (center) options.center = center
+    this.map = L.map('map', options)
     this.map.addLayer(this.treeMarkers)
     this.map.on('click', (event: any) => {
       this.setMarker(event.latlng)
     })
-
-    // Init the "search" popup for the map marker
-    this.markerPopupTemplate = this.querySelector('[js-template="marker-popup"]') as HTMLTemplateElement
+    this.map.on('move', () => window.Arbolado.emitEvent(this, 'arbolado:map/move', { bounds: this.getMapBounds() }))
 
     // Look for a marker on the query params. If there's one set it.
     const marker = window.Arbolado.queryParams.get('user_latlng')
@@ -81,6 +99,20 @@ export default class MapElement extends HTMLElement {
         window.Arbolado.pushQueryParams()
       }
     }
+  }
+
+  private setLoading(loading: boolean) {
+    if (loading) this.classList.add('loading')
+    else this.classList.remove('loading')
+  }
+  
+  private async getLocationFromURL(): Promise<L.LatLng | undefined> {
+    const path = window.location.pathname.split('/')
+    if (path[1] !== 'ubicacion') return undefined
+    const ubicacion = path[2]
+    if (!ubicacion) return undefined
+    const results = await window.Arbolado.addressLookup(ubicacion)
+    return results[0]?.latlng
   }
 
   /**
@@ -149,22 +181,22 @@ export default class MapElement extends HTMLElement {
    */
   private latlngUpdated(map: L.Map, latLng: L.LatLng): void {
     // Emit the new marker coordinates
-    window.Arbolado.emitEvent(this, 'arbolado/maker:set', { latLng })
+    window.Arbolado.emitEvent(this, 'arbolado:maker/set', { latLng })
     // Re-center the map around the marker
     map.panTo(latLng)
   }
 
   private createMarkerPopup() {
-    const markerPopupContent = this.markerPopupTemplate.content.cloneNode(true) as HTMLElement
+    const markerPopupContent = window.Arbolado.loadTemplate(MarkerPopupTemplate) as HTMLElement
     markerPopupContent.querySelector('[js-marker-popup-search]')?.addEventListener('click', () => {
       this.marker?.closePopup()
       // Emit an event when the user clicks the search button from marker so the search form can be notified and perform the search
-      window.Arbolado.emitEvent(this, 'arbolado/marker:search')
+      window.Arbolado.emitEvent(this, 'arbolado:marker/search')
     })
     markerPopupContent.querySelector('[js-marker-popup-clear]')?.addEventListener('click', () => {
       this.removeMarker()
       // Emit an event when the user clears the map marker so the search form can be notified and update its UI
-      window.Arbolado.emitEvent(this, 'arbolado/marker:removed')
+      window.Arbolado.emitEvent(this, 'arbolado:marker/removed')
     })
     return markerPopupContent
   }
@@ -230,6 +262,6 @@ export default class MapElement extends HTMLElement {
    */
   public selectTree(id: number): void {
     // Emit the selected tree's ID
-    window.Arbolado.emitEvent(this, 'arbolado/tree:selected', { id })
+    window.Arbolado.emitEvent(this, 'arbolado:tree/selected', { id })
   }
 }

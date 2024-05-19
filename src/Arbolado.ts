@@ -1,3 +1,7 @@
+import { LatLng, LatLngBounds } from 'leaflet'
+import NominatimResponse from './types/NominatimResponse'
+import Alert, { AlertType } from './elements/Alert/Alert'
+
 export default class Arbolado {
   overlay: HTMLElement 
   queryParams: URLSearchParams
@@ -10,13 +14,19 @@ export default class Arbolado {
     document.addEventListener('keydown', this.handleEsc.bind(this))
     window.addEventListener('popstate', () => {
       this.queryParams = new URLSearchParams(window.location.search)
-      this.emitEvent(document, 'arbolado/queryParams:update')
+      this.emitEvent(document, 'arbolado:queryParams/update')
     })
-    this.overlay.addEventListener('click', () => this.emitEvent(document, 'arbolado/overlay:click'))
+    this.overlay.addEventListener('click', () => this.emitEvent(document, 'arbolado:overlay/click'))
   }
 
   ready(fn: () => any) {
     document.addEventListener('DOMContentLoaded', fn)
+  }
+
+  loadTemplate(HTMLContent: string): Node {
+    const template = document.createElement('template')
+    template.innerHTML = HTMLContent
+    return template.content.cloneNode(true)
   }
 
   emitEvent(element: Node, name: string, data?: any) {
@@ -24,7 +34,7 @@ export default class Arbolado {
   }
 
   setLoading(loading: boolean) {
-    this.emitEvent(document, 'arbolado/loading', { loading })
+    this.emitEvent(document, 'arbolado:loading', { loading })
   }
 
   pushURL(path: string) {
@@ -61,6 +71,13 @@ export default class Arbolado {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  alert(type: AlertType, content: string, timeout?: number) {
+    const alert = new Alert(type, content)
+    alert.addEventListener('arbolado:alert/closed', () => alert.remove())
+    document.body.append(alert)
+    alert.show(timeout)
   }
 
   validateForm(form: HTMLFormElement): boolean {
@@ -106,15 +123,38 @@ export default class Arbolado {
     }
   }
 
-  loadSourceFromURL() {
+  async loadSourceFromURL() {
     const path = window.location.pathname.split('/')
     if (path[1] !== 'fuente') return
     const fuenteUrl = path[2]
     if (!fuenteUrl) return
-    window.Arbolado.fetchJson(`${import.meta.env.VITE_API_URL}/fuentes/${fuenteUrl}`, 'GET').then((trees) => {
-      if (!trees?.length) return
-      window.Arbolado.emitEvent(document, 'arbolado/results:updated', { trees })
-      window.scrollTo({ top: 0, behavior: 'smooth' }) // Scroll up to the map (for mobile)
+    const trees = await window.Arbolado.fetchJson(`${import.meta.env.VITE_API_URL}/fuentes/${fuenteUrl}`, 'GET')
+    if (!trees?.length) return
+    window.Arbolado.emitEvent(document, 'arbolado:results/updated', { trees })
+    window.scrollTo({ top: 0, behavior: 'smooth' }) // Scroll up to the map (for mobile)
+    return true
+  }
+
+  // Looks up an address or place and returns its coordinates.
+  async addressLookup(query: string, bounds?: LatLngBounds): Promise<NominatimResponse[]> {
+    const { VITE_NOMINATIM_URL } = import.meta.env
+    const data = new URLSearchParams({
+      'accept-language': 'es',
+      addressdetails: '1',
+      bounded: '1',
+      format: 'json',
+      q: query,
+    })
+    if (bounds) data.set('viewbox', bounds.toBBoxString())
+    const url = `${VITE_NOMINATIM_URL}?${data.toString()}`
+    const response = await window.Arbolado.fetchJson(url, 'GET', undefined, undefined, false)
+    return response.map((item: any) => {
+      return {
+        latlng: new LatLng(item.lat, item.lon),
+        displayName: item.display_name,
+        type: item.type,
+        address: item.address,
+      }
     })
   }
 }

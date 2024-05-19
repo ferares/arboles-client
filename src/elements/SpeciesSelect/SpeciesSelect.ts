@@ -1,4 +1,7 @@
-import Species from '../types/Species'
+import SpeciesSelectTemplate from './SpeciesSelect.html?raw'
+import SpeciesSelectItemTemplate from './SpeciesSelectItem.html?raw'
+
+import Species from '../../types/Species'
 
 export default class SpeciesSelect extends HTMLElement {
   private species: Species[] = []
@@ -8,10 +11,11 @@ export default class SpeciesSelect extends HTMLElement {
   private btnElement: HTMLButtonElement
   private inputElement: HTMLInputElement
   private listElement: HTMLElement
-  private allSpeciesElement: Species = { nombre_cientifico: 'Todas', nombre_comun: '', id: -1, url: '' }
+  private noSelectionElement: Species
 
   constructor() {
     super()
+    this.innerHTML = SpeciesSelectTemplate
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.renderSpecies = this.renderSpecies.bind(this)
     this.addSpeciesOption = this.addSpeciesOption.bind(this)
@@ -22,6 +26,10 @@ export default class SpeciesSelect extends HTMLElement {
     this.inputElement = this.querySelector('[js-species-select-input]') as HTMLInputElement
     this.listElement = this.querySelector('[js-species-select-list]') as HTMLElement
     this.btnElement = this.querySelector('[js-species-select-btn]') as HTMLButtonElement
+
+    // Setup the "no species selected" option
+    const noSelectionLabel = this.getAttribute('data-no-selection-label') || 'Todas'
+    this.noSelectionElement = { nombre_cientifico: noSelectionLabel, nombre_comun: '', id: -1, url: '' }
 
     // Load the species list on first interaction
     this.btnElement.addEventListener('click', this.loadSpecies, { once: true })
@@ -45,9 +53,9 @@ export default class SpeciesSelect extends HTMLElement {
     if (this.status === 'loaded') return
     this.status = 'loading'
     await window.Arbolado.fetchJson(`${import.meta.env.VITE_API_URL}/especies`, 'GET', undefined, undefined, false).then((species) => {
-      this.renderSpecies([this.allSpeciesElement, ...species])
+      this.renderSpecies([this.noSelectionElement, ...species])
       this.status = 'loaded'
-      window.Arbolado.emitEvent(this, 'arbolado/species:loaded')
+      window.Arbolado.emitEvent(this, 'arbolado:species/loaded')
     })
   }
 
@@ -59,7 +67,7 @@ export default class SpeciesSelect extends HTMLElement {
       if (!speciesURL) return resolve(null)
       if (this.status === 'idle') this.loadSpecies()
       if (this.status === 'loading') {
-        this.addEventListener('arbolado/species:loaded', () => resolve(this.selectSpeciesFromURL(speciesURL)))
+        this.addEventListener('arbolado:species/loaded', () => resolve(this.selectSpeciesFromURL(speciesURL)))
       } else {
         resolve(this.selectSpeciesFromURL(speciesURL))
       }
@@ -152,13 +160,12 @@ export default class SpeciesSelect extends HTMLElement {
       commonName.innerText = this.value.nombre_comun
       this.btnElement.appendChild(commonName)
     } else {
-      this.btnElement.innerText = this.allSpeciesElement.nombre_cientifico
+      this.btnElement.innerText = this.noSelectionElement.nombre_cientifico
     }
   }
 
   private addSpeciesOption(species: Species, index: number) {
-    const template = this.querySelector('[js-template="species-select-item"]') as HTMLTemplateElement
-    const templateClone = template.content.cloneNode(true) as HTMLElement
+    const templateClone = window.Arbolado.loadTemplate(SpeciesSelectItemTemplate) as HTMLElement
     const item = templateClone.querySelector('[js-species-select-item]') as HTMLElement
     const btn = templateClone.querySelector('[js-species-select-item-btn]') as HTMLButtonElement
     const scientificName = btn.querySelector('[js-scientific-name]') as HTMLElement

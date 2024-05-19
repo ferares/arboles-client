@@ -1,7 +1,9 @@
 import * as bootstrap from 'bootstrap'
 import { LatLng } from 'leaflet'
 
-import SpeciesSelect from './SpeciesSelect'
+import SearchFormTemplate from './SearchForm.html?raw'
+
+import SpeciesSelect from '../SpeciesSelect/SpeciesSelect'
 
 export default class SearchForm extends HTMLElement {
   private latLng?: LatLng
@@ -19,9 +21,11 @@ export default class SearchForm extends HTMLElement {
   private patagonica: HTMLInputElement
   private species: SpeciesSelect
   private radio: HTMLInputElement
+  private filtersSidebar: bootstrap.Offcanvas
   
   constructor() {
     super()
+    this.innerHTML = SearchFormTemplate
     this.noResultsModal = new bootstrap.Modal(document.querySelector('[js-no-results-modal]') as HTMLElement)
     // Init form fields
     this.form = this.querySelector('[js-form]') as HTMLFormElement
@@ -36,8 +40,9 @@ export default class SearchForm extends HTMLElement {
     this.pampeana = this.querySelector('[js-input="pampeana"]') as HTMLInputElement
     this.patagonica = this.querySelector('[js-input="patagonica"]') as HTMLInputElement
     this.species = this.querySelector('[js-input="species"]') as SpeciesSelect
+    this.filtersSidebar = new bootstrap.Offcanvas(document.querySelector('[js-filters-menu]') as HTMLElement)
     // Emit an event when the user selects "En todo el mapa" so the map can be notified and removes the marker
-    this.markerAll.addEventListener('change', () => window.Arbolado.emitEvent(this, 'arbolado/marker:remove'))
+    this.markerAll.addEventListener('change', () => window.Arbolado.emitEvent(this, 'arbolado:marker/remove'))
     // Submit handler
     this.form.addEventListener('submit', (event) => {
       event.preventDefault()
@@ -46,7 +51,7 @@ export default class SearchForm extends HTMLElement {
     // Set the initial form values
     this.updateFormValues()
     // Update the form values if the user navigates back/forth trough the session's history
-    document.addEventListener('arbolado/queryParams:update', () => this.updateFormValues())
+    document.addEventListener('arbolado:queryParams/update', () => this.updateFormValues())
     // Set the popover for the search button that pops up when the search is too big
     this.searchBtnPopover = new bootstrap.Popover(this.searchBtn, {
       title: 'Opa, ¡esos son muchos árboles!',
@@ -139,10 +144,13 @@ export default class SearchForm extends HTMLElement {
       if (updateURL) window.Arbolado.pushURL('')
     }
 
+    // Close the filters sidebar
+    this.filtersSidebar.hide()
+
     // Make the search
     let requestUrl = `${import.meta.env.VITE_API_URL}/arboles?${searchQueryParams.toString()}`
     const trees = await window.Arbolado.fetchJson(requestUrl)
-    window.Arbolado.emitEvent(document, 'arbolado/results:updated', { trees })
+    window.Arbolado.emitEvent(document, 'arbolado:results/updated', { trees })
     if (!trees?.length) this.noResultsModal.show()
     else window.scrollTo({ top: 0, behavior: 'smooth' }) // Scroll up to the map (for mobile)
   }
